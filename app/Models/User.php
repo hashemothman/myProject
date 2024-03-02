@@ -4,6 +4,9 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +14,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -66,4 +69,38 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function account(): HasOne
+    {
+        return $this->hasOne(Account::class, 'user_id');
+    }
+
+    public function userInfo(): HasOne
+    {
+        return $this->hasOne(UserInfo::class, 'user_id');
+    }
+
+    public function bussinessAccount(): HasOne
+    {
+        return $this->hasOne(BussinessAccount::class, 'user_id');
+    }
+
+    public function maxAmounts(): HasMany
+    {
+        return $this->hasMany(MaxAmount::class, 'user_id');
+    }
+
+    public function wallets(): HasMany
+    {
+        return $this->hasMany(Wallet::class, 'user_id');
+    }
+
+    public function complains(): HasMany
+    {
+        return $this->hasMany(Complain::class, 'user_id');
+    }
+
+    public function userLogs(): HasMany
+    {
+        return $this->hasMany(UserLog::class, 'user_id');
+    }
 }
