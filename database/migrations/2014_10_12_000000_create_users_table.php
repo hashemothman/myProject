@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type',['User'])->default('User');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role_name')->default('user');
             $table->rememberToken();
             $table->timestamps();
         });
