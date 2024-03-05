@@ -3,18 +3,27 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+=======
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable,HasRoles ,SoftDeletes;
+
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +36,7 @@ class User extends Authenticatable implements JWTSubject
         'status',
         'type',
         'password',
+        'role-name',
     ];
 
     /**
@@ -69,6 +79,15 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+
+    /**
+     * Get all of the roles for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+
+
+=======
     public function account(): HasOne
     {
         return $this->hasOne(Account::class, 'user_id');
