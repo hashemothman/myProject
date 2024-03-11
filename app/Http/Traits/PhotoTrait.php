@@ -14,9 +14,9 @@ trait PhotoTrait
         return $path;
     }
 
-    public function PhotoExists(Request $request ,$requestColoumn, $coloumnName, $create= true, $model= null) {
+    public function PhotoExists(Request $request ,$requestColoumn, $coloumnName, $folderName, $create= true, $model= null) {
         if (!empty($requestColoumn)) {
-            return $this->UploadPhoto($request, 'userInfos', $coloumnName);
+            return $this->UploadPhoto($request, $folderName, $coloumnName);
         }
         if ($create) {
             return null;

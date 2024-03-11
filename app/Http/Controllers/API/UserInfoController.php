@@ -28,7 +28,7 @@ class UserInfoController extends Controller
      */
     public function store(UserInfoRequest $request)
     {
-        $photo_path            = $this->PhotoExists($request,$request->photo,'photo');
+        $photo_path            = $this->PhotoExists($request,$request->photo,'photo', 'userInfos');
         $front_card_image_path = $this->UploadPhoto($request, 'userInfos', 'front_card_image');
         $back_card_image_path  = $this->UploadPhoto($request, 'userInfos', 'back_card_image');
 
@@ -68,9 +68,9 @@ class UserInfoController extends Controller
             return $this->customeResponse(null, 'Not Found', 404);
         }
 
-        $photo_path            = $this->PhotoExists($request, $request->photo, 'photo', false, $userInfo);
-        $front_card_image_path = $this->PhotoExists($request, $request->front_card_image, 'front_card_image', false, $userInfo);
-        $back_card_image_path  = $this->PhotoExists($request, $request->back_card_image, 'back_card_image', false, $userInfo);
+        $photo_path            = $this->PhotoExists($request, $request->photo, 'photo','userInfos', false, $userInfo);
+        $front_card_image_path = $this->PhotoExists($request, $request->front_card_image, 'front_card_image','userInfos', false, $userInfo);
+        $back_card_image_path  = $this->PhotoExists($request, $request->back_card_image, 'back_card_image','userInfos', false, $userInfo);
 
         $userInfo->update([
             'city_id'          => $request->city_id,
