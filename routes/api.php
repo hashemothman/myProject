@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,10 +21,23 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('jwt.verify')->group(function () {
-    
+
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
 
+    ###########################################################################################################
+    ######################################### USER INFO CONTROLLER ############################################
+    ###########################################################################################################
+
+    Route::get('/userInfos', [UserInfoController::class, 'index']);
+    Route::get('/userInfo/{userInfo}', [UserInfoController::class, 'show']);
+    Route::post('/creat_userInfo', [UserInfoController::class, 'store']);
+    Route::post('/update_userInfo/{userInfo}', [UserInfoController::class, 'update']);
+    Route::delete('/delete_userInfo/{userInfo}', [UserInfoController::class, 'destroy']);
+
+    ###########################################################################################################
+    ###########################################################################################################
+    ###########################################################################################################
 });
 
 
