@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInfoRequest;
 use App\Http\Resources\UserInfoResource;
 use App\Http\Traits\ApiResponseTrait;
-use App\Http\Traits\PhotoTrait;
+use App\Http\Traits\FileTrait;
 use App\Models\UserInfo;
 
 class UserInfoController extends Controller
 {
-    use ApiResponseTrait, PhotoTrait;
+    use ApiResponseTrait, FileTrait;
 
     /**
      * Display a listing of the resource.

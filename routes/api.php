@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\API\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,20 @@ Route::middleware('jwt.verify')->group(function () {
     Route::post('/creat_userInfo', [UserInfoController::class, 'store']);
     Route::post('/update_userInfo/{userInfo}', [UserInfoController::class, 'update']);
     Route::delete('/delete_userInfo/{userInfo}', [UserInfoController::class, 'destroy']);
+
+    ###########################################################################################################
+    ###########################################################################################################
+    ###########################################################################################################
+
+    ###########################################################################################################
+    ########################################## Invoice CONTROLLER #############################################
+    ###########################################################################################################
+
+    Route::get('/invoices', [InvoiceController::class, 'index']);
+    Route::get('/invoice/{invoice}', [InvoiceController::class, 'show']);
+    Route::post('/creat_invoice', [InvoiceController::class, 'store']);
+    Route::post('/update_invoice/{invoice}', [InvoiceController::class, 'update']);
+    Route::delete('/delete_invoice/{invoice}', [InvoiceController::class, 'destroy']);
 
     ###########################################################################################################
     ###########################################################################################################
