@@ -29,7 +29,7 @@ class InvoiceController extends Controller
      */
     public function store(InvoiceRequest $request)
     {
-        $file_path            = $this->FileExists($request,$request->file,'file', 'invoices');
+        $file_path = $this->FileExists($request,$request->file,'file', 'invoices', 'BasFile');
 
         $invoice = Invoice::create([
             'officeInfo_id'  => $request->officeInfo_id,
@@ -67,7 +67,7 @@ class InvoiceController extends Controller
             return $this->customeResponse(null, 'Not Found', 404);
         }
 
-        $file_path            = $this->FileExists($request, $request->file, 'file','invoices', false, $invoice);
+        $file_path= $this->FileExists($request, $request->file, 'file','invoices', 'BasFile', false, $invoice);
 
         $invoice->update([
             'officeInfo_id'  => $request->officeInfo_id,
