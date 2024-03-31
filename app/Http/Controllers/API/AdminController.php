@@ -8,6 +8,7 @@ use App\Http\Resources\AdminResource;
 use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminController extends Controller
 {
@@ -31,7 +32,7 @@ class AdminController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        JWTAuth::parseToken()->invalidate();
         Auth::guard('admin-api')->logout();
         return response()->json([
             'message' => 'Successfully logged out',

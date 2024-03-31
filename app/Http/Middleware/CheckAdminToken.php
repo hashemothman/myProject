@@ -30,10 +30,10 @@ class CheckAdminToken
                 }
             }
         }
-        if (!$user) {
-            return response()->json(['success' => false, 'message' => trans('Unauthenticated')]);
-            
-        }
+        // if (!$user) {
+        //     return response()->json(['success' => false, 'message' => trans('Unauthenticated')]);
+
+        // }
         return $next($request);
     }
 }

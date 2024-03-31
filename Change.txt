@@ -1,0 +1,193 @@
+diff --git a/app/Http/Controllers/API/AdminController.php b/app/Http/Controllers/API/AdminController.php
+index 9dd5b7b..5856d6d 100644
+--- a/app/Http/Controllers/API/AdminController.php
++++ b/app/Http/Controllers/API/AdminController.php
+@@ -8,6 +8,7 @@
+ use App\Http\Traits\ApiResponseTrait;
+ use Illuminate\Http\Request;
+ use Illuminate\Support\Facades\Auth;
++use Tymon\JWTAuth\Facades\JWTAuth;
+ 
+ class AdminController extends Controller
+ {
+@@ -31,7 +32,7 @@ public function login(AdminLoginRequest $request)
+ 
+     public function logout(Request $request)
+     {
+-        $request->user()->tokens()->delete();
++        JWTAuth::parseToken()->invalidate();
+         Auth::guard('admin-api')->logout();
+         return response()->json([
+             'message' => 'Successfully logged out',
+diff --git a/app/Http/Middleware/CheckAdminToken.php b/app/Http/Middleware/CheckAdminToken.php
+index ef1d059..fbb0812 100644
+--- a/app/Http/Middleware/CheckAdminToken.php
++++ b/app/Http/Middleware/CheckAdminToken.php
+@@ -30,10 +30,10 @@ public function handle(Request $request, Closure $next): Response
+                 }
+             }
+         }
+-        if (!$user) {
+-            return response()->json(['success' => false, 'message' => trans('Unauthenticated')]);
+-            
+-        }
++        // if (!$user) {
++        //     return response()->json(['success' => false, 'message' => trans('Unauthenticated')]);
++
++        // }
+         return $next($request);
+     }
+ }
+diff --git a/app/Http/Resources/AdminResource.php b/app/Http/Resources/AdminResource.php
+index 3a4d60f..c0ef485 100644
+--- a/app/Http/Resources/AdminResource.php
++++ b/app/Http/Resources/AdminResource.php
+@@ -14,6 +14,9 @@ class AdminResource extends JsonResource
+      */
+     public function toArray(Request $request): array
+     {
+-        return parent::toArray($request);
++        return [
++            'id'    => $this->id,
++            'email' => $this->email
++        ];
+     }
+ }
+diff --git a/app/Models/Admin.php b/app/Models/Admin.php
+index c740e0f..725ea15 100644
+--- a/app/Models/Admin.php
++++ b/app/Models/Admin.php
+@@ -2,13 +2,14 @@
+ 
+ namespace App\Models;
+ 
++use Illuminate\Foundation\Auth\User as Authenticatable;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\Relations\HasMany;
+ use Illuminate\Database\Eloquent\SoftDeletes;
+ use Tymon\JWTAuth\Contracts\JWTSubject;
+ 
+-class Admin extends Model implements JWTSubject
++class Admin extends Authenticatable implements JWTSubject
+ {
+     use HasFactory, SoftDeletes;
+ 
+@@ -18,6 +19,16 @@ class Admin extends Model implements JWTSubject
+         'role_name'
+     ];
+ 
++    /**
++     * The attributes that should be hidden for serialization.
++     *
++     * @var array<int, string>
++     */
++    protected $hidden = [
++        'password',
++        'remember_token',
++    ];
++
+     /**
+      * Get the identifier that will be stored in the subject claim of the JWT.
+      *
+@@ -42,4 +53,6 @@ public function employees(): HasMany
+     {
+         return $this->hasMany(Employee::class, 'admin_id', 'id');
+     }
++
++
+ }
+diff --git a/database/seeders/DatabaseSeeder.php b/database/seeders/DatabaseSeeder.php
+index a9f4519..d61d0cf 100644
+--- a/database/seeders/DatabaseSeeder.php
++++ b/database/seeders/DatabaseSeeder.php
+@@ -4,6 +4,7 @@
+ 
+ // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+ use Illuminate\Database\Seeder;
++use Illuminate\Support\Facades\Hash;
+ 
+ class DatabaseSeeder extends Seeder
+ {
+@@ -14,9 +15,10 @@ public function run(): void
+     {
+         // \App\Models\User::factory(10)->create();
+ 
+-        // \App\Models\User::factory()->create([
+-        //     'name' => 'Test User',
+-        //     'email' => 'test@example.com',
+-        // ]);
++        \App\Models\Admin::create([
++            'email' => 'yousef@gmail.com',
++            'password' => Hash::make('12345678'),
++            'role_name' => 'sssss',
++        ]);
+     }
+ }
+diff --git a/routes/admin.php b/routes/admin.php
+index f2e1154..24db7a1 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -1,25 +1,46 @@
+ <?php
+ 
++use App\Http\Controllers\API\AdminController;
++use App\Http\Controllers\Api\EmployeeController;
+ use Illuminate\Support\Facades\Route;
+ use App\Http\Controllers\RoleController;
+ use App\Http\Controllers\API\UserController;
+ 
+ Route::middleware('admin')->group(function () {
+ 
+-    // Role
+-    Route::get('/roles', [RoleController::class, 'index']);
+-    Route::post('/add-role', [RoleController::class, 'store']);
+-    Route::get('/role/{role}', [RoleController::class, 'show']);
+-    Route::put('/update-role/{role}', [RoleController::class, 'update']);
+-    Route::delete('/delete-role/{role}', [RoleController::class, 'destroy']);
+-    // End Role
+-
+-    // User
+-    Route::get('/users', [UserController::class, 'index']);
+-    Route::post('/add-user', [UserController::class, 'store']);
+-    Route::get('/user/{user}', [UserController::class, 'show']);
+-    Route::put('/update-user/{user}', [UserController::class, 'update']);
+-    Route::delete('/delete-user/{user}', [UserController::class, 'destroy']);
+-    // End User
+-});
++    Route::post('/login', [AdminController::class, 'login']);
++
++    Route::middleware('CheckAdminToken:admin-api')->group(function () {
++        // Role
++        Route::get('/roles', [RoleController::class, 'index']);
++        Route::post('/add-role', [RoleController::class, 'store']);
++        Route::get('/role/{role}', [RoleController::class, 'show']);
++        Route::put('/update-role/{role}', [RoleController::class, 'update']);
++        Route::delete('/delete-role/{role}', [RoleController::class, 'destroy']);
++        // End Role
++
++        // User
++        Route::get('/users', [UserController::class, 'index']);
++        Route::post('/add-user', [UserController::class, 'store']);
++        Route::get('/user/{user}', [UserController::class, 'show']);
++        Route::put('/update-user/{user}', [UserController::class, 'update']);
++        Route::delete('/delete-user/{user}', [UserController::class, 'destroy']);
++        // End User
++
++        Route::post('/logout', [AdminController::class, 'logout']);
+ 
++        ###########################################################################################################
++        ########################################## Employee CONTROLLER ############################################
++        ###########################################################################################################
++
++        Route::get('/employees', [EmployeeController::class, 'index']);
++        Route::get('/employee/{employee}', [EmployeeController::class, 'show']);
++        Route::post('/creat_employee', [EmployeeController::class, 'store']);
++        Route::post('/update_employee/{employee}', [EmployeeController::class, 'update']);
++        Route::delete('/delete_employee/{employee}', [EmployeeController::class, 'destroy']);
++
++        ###########################################################################################################
++        ###########################################################################################################
++        ###########################################################################################################
++    });
++});
