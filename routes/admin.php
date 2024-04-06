@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\API\MaxAmountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\WalletController;
 
 Route::middleware('admin')->group(function () {
 
@@ -28,6 +30,14 @@ Route::middleware('admin')->group(function () {
         // End User
 
         Route::post('/logout', [AdminController::class, 'logout']);
+
+        //Wallet Route
+        Route::apiResource('wallet', WalletController::class);
+        //End Wallet Route
+
+        //Max Amount Route
+        Route::apiResource('max_amoun', MaxAmountController::class);
+        //End Max Amount Route
 
         ###########################################################################################################
         ########################################## Employee CONTROLLER ############################################

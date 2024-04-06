@@ -11,7 +11,7 @@ use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class WalletCotroller extends Controller
+class WalletController extends Controller
 {
     use ApiResponseTrait;
 
@@ -21,7 +21,7 @@ class WalletCotroller extends Controller
     public function index()
     {
         $wallets = Wallet::all();
-        $data = Wallet::collection($wallets);
+        $data = WalletResource::collection($wallets);
         return $this->customeResponse($data, 'Done!', 200);
     }
 
