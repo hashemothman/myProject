@@ -12,6 +12,7 @@ class Percent extends Model
 
     protected $fillable = [
         'operation_type',
+        'coin_id',
         'value',
     ];
 }

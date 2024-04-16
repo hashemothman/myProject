@@ -22,4 +22,13 @@ class UserLog extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($user_log) {
+            $user_log->user_id = Auth::user()->id;
+            return true;
+        });
+    }
 }

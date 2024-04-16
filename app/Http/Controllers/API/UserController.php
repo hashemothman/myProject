@@ -4,16 +4,22 @@ namespace App\Http\Controllers\API;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\AccountRequest;
 use App\Http\Traits\ApiResponseTrait;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Traits\WalletAndAccountTrait;
 use App\Http\Requests\Auth\RegisterRequest;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait,WalletAndAccountTrait;
     /**
      * Display a listing of the resource.
      */
@@ -26,22 +32,27 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(RegisterRequest $request)
+    public function store(StoreUserRequest $request, AccountRequest $account_request,StoreWalletRequest $wallet_request)
     {
-        $Validation = $request->validated();
-        $user = User::create([
-            'email'         => $request->email,
-            'mobile_number' => $request->mobile_number,
-            'password'      => Hash::make($request->password),
-        ]);
-        $roleName = $request->input('role_name');
-        $role = Role::where('name', $roleName)->first();
-        
-        if (!$role) {
-            return $this->customResponse(null, 'Role not found', 404);
+        try {
+            $validatedData = $request->validated();
+            DB::beginTransaction();
+                $user = User::create([
+                    'email'         => $request->email,
+                    'mobile_number' => $request->mobile_number,
+                    'status'        => $request->status,
+                    'type'          => $request->type,
+                    'password'      => Hash::make($request->password),
+                ]);
+                $this->createAccount($user->id, $account_request);
+                $this->createDolarWallet($wallet_request);
+            DB::commit();
+            return $this->customResponse(new UserResource($user), 'User created successfully', 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            DB::rollback();
+            return $this->customResponse(null, "Error, something went wrong", 500);
         }
-        $user->assignRole($role);
-        return $this->customeResponse(new UserResource($user),'user created successfully',200);
     }
 
     /**
@@ -58,22 +69,16 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RegisterRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         if ($user) {
             $user->update([
                 'email'         => $request->email,
                 'mobile_number' => $request->mobile_number,
+                'status'        => $request->status,
+                'type'          => $request->type,
                 'password'      => Hash::make($request->password),
             ]);
-            if ($request->filled('role_name')) {
-                $roleName = $request->input('role_name');
-                $role = Role::where('name', $roleName)->first();
-                if (!$role) {
-                    return $this->customResponse(null, 'Role not found', 404);
-                }
-                $user->syncRoles([$role->id]);
-            }
             return $this->customeResponse(new UserResource($user), 'user updated successfully', 200);
         }
         return $this->customeResponse(null, 'user not found', 404);

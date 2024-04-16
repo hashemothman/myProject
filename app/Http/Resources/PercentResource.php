@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Coin;
 use Illuminate\Http\Request;
+use App\Http\Resources\CoinResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class PercentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,13 +16,11 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
+        $coin = Coin::where('id',$this->coin_id)->get();
         return [
-            'email'            => $this->email,
-            'mobile_number'    => $this->mobile_number,
-            'status'           => $this->status,
-            'type'             => $this->type,
-            'role_name'        => $this->role_name,
+            'coin_id'        => new CoinResource($coin),
+            'value'          => $this->value,
+            'operation_type' => $this->operation_type,
         ];
     }
 }

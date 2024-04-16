@@ -3,9 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\AccountResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class ReportResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,13 +15,11 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
+        $account = Account::where('id',$this->account_id)->first();
         return [
-            'email'            => $this->email,
-            'mobile_number'    => $this->mobile_number,
-            'status'           => $this->status,
-            'type'             => $this->type,
-            'role_name'        => $this->role_name,
+            'id' =>$this->id,
+            'file' => asset('files/reports' . $this->file),
+            'account' => new AccountResource($account),
         ];
     }
 }
