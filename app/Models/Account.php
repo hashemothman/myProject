@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Report;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Account extends Model
 {
@@ -15,7 +16,7 @@ class Account extends Model
         'user_id',
         'account',
         'account_type',
-        'q_rcode',
+        // 'q_rcode',
     ];
 
 
@@ -23,4 +24,11 @@ class Account extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class, 'account_id', 'id');
+    }
+
 }

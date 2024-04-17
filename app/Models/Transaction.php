@@ -13,8 +13,8 @@ class Transaction extends Model
 
     protected $fillable = [
         'coin_id',
-        'senser',
-        'reciever_uuid',
+        'sender',
+        'reciever_account',
         'amount',
         'date',
     ];
@@ -22,5 +22,14 @@ class Transaction extends Model
     public function coin(): BelongsTo
     {
         return $this->belongsTo(Coin::class, 'coin_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($transaction) {
+            $transaction->sender = Auth::user()->id;
+            return true; 
+        });
     }
 }

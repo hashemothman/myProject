@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('percents', function (Blueprint $table) {
             $table->id();
-            $table->string('operation_type');
+            $table->enum('operation_type', ['internal', 'external']);
+            $table->string('coin_id');
             $table->string('value');
             $table->softDeletes();
             $table->timestamps();
