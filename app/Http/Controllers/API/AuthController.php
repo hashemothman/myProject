@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UserLoginRequest;
+use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Models\User;
@@ -28,7 +28,7 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
-    public function login(LoginRequest $request)
+    public function login(UserLoginRequest $request)
     {
         if (!empty($request->email)) {
             $credentials = $request->only('email', 'password');
@@ -52,7 +52,7 @@ class AuthController extends Controller
         return $this->apiResponse($data, $token, 'User Login successfully', 200);
     }
 
-    public function register(RegisterRequest $request)
+    public function register(UserRegisterRequest $request)
     {
         $user = User::create([
             'email'         => $request->email,

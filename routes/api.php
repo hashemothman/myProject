@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\OfficeInfoController;
 use App\Http\Controllers\API\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +42,34 @@ Route::middleware('jwt.verify')->group(function () {
     Route::post('/creat_userInfo', [UserInfoController::class, 'store']);
     Route::post('/update_userInfo/{userInfo}', [UserInfoController::class, 'update']);
     Route::delete('/delete_userInfo/{userInfo}', [UserInfoController::class, 'destroy']);
+
+    ###########################################################################################################
+    ###########################################################################################################
+    ###########################################################################################################
+
+    ###########################################################################################################
+    ########################################## Invoice CONTROLLER #############################################
+    ###########################################################################################################
+
+    Route::get('/invoices', [InvoiceController::class, 'index']);
+    Route::get('/invoice/{invoice}', [InvoiceController::class, 'show']);
+    Route::post('/creat_invoice', [InvoiceController::class, 'store']);
+    Route::post('/update_invoice/{invoice}', [InvoiceController::class, 'update']);
+    Route::delete('/delete_invoice/{invoice}', [InvoiceController::class, 'destroy']);
+
+    ###########################################################################################################
+    ###########################################################################################################
+    ###########################################################################################################
+
+    ###########################################################################################################
+    ######################################### OfficeInfo CONTROLLER ###########################################
+    ###########################################################################################################
+
+    Route::get('/officeInfos', [OfficeInfoController::class, 'index']);
+    Route::get('/officeInfo/{officeInfo}', [OfficeInfoController::class, 'show']);
+    Route::post('/creat_officeInfo', [OfficeInfoController::class, 'store']);
+    Route::post('/update_officeInfo/{officeInfo}', [OfficeInfoController::class, 'update']);
+    Route::delete('/delete_officeInfo/{officeInfo}', [OfficeInfoController::class, 'destroy']);
 
     ###########################################################################################################
     ###########################################################################################################

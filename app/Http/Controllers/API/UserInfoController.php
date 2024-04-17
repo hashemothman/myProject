@@ -6,12 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserInfoRequest;
 use App\Http\Resources\UserInfoResource;
 use App\Http\Traits\ApiResponseTrait;
-use App\Http\Traits\PhotoTrait;
+use App\Http\Traits\FileTrait;
 use App\Models\UserInfo;
 
 class UserInfoController extends Controller
 {
-    use ApiResponseTrait, PhotoTrait;
+    use ApiResponseTrait, FileTrait;
 
     /**
      * Display a listing of the resource.
@@ -28,9 +28,9 @@ class UserInfoController extends Controller
      */
     public function store(UserInfoRequest $request)
     {
-        $photo_path            = $this->PhotoExists($request,$request->photo,'photo', 'userInfos');
-        $front_card_image_path = $this->UploadPhoto($request, 'userInfos', 'front_card_image');
-        $back_card_image_path  = $this->UploadPhoto($request, 'userInfos', 'back_card_image');
+        $photo_path            = $this->FileExists($request,$request->photo,'photo', 'userInfos', 'BasImage');
+        $front_card_image_path = $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage');
+        $back_card_image_path  = $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage');
 
         $user_info = UserInfo::create([
             'city_id'          => $request->city_id,
@@ -68,9 +68,9 @@ class UserInfoController extends Controller
             return $this->customeResponse(null, 'Not Found', 404);
         }
 
-        $photo_path            = $this->PhotoExists($request, $request->photo, 'photo','userInfos', false, $userInfo);
-        $front_card_image_path = $this->PhotoExists($request, $request->front_card_image, 'front_card_image','userInfos', false, $userInfo);
-        $back_card_image_path  = $this->PhotoExists($request, $request->back_card_image, 'back_card_image','userInfos', false, $userInfo);
+        $photo_path            = $this->FileExists($request, $request->photo, 'photo','userInfos','BasImage', false, $userInfo);
+        $front_card_image_path = $this->FileExists($request, $request->front_card_image, 'front_card_image','userInfos','BasImage', false, $userInfo);
+        $back_card_image_path  = $this->FileExists($request, $request->back_card_image, 'back_card_image','userInfos','BasImage', false, $userInfo);
 
         $userInfo->update([
             'city_id'          => $request->city_id,

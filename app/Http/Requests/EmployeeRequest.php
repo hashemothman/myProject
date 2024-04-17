@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class EmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'         => 'nullable|string|email',
-            'mobile_number' => 'nullable|string',
-            'password'      => 'required|min:8',
+            'name'             => 'required|string',
+            'idNumber'         => 'required|numeric',
+            'front_card_image' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
+            'back_card_image'  => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
         ];
     }
 }

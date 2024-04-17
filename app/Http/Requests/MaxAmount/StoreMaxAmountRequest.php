@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\MaxAmount;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class RegisterRequest extends FormRequest
+class StoreMaxAmountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +23,10 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'         => 'required|string|email|unique:users',
-            'mobile_number' => 'required|string|unique:users',
-            'password'      => 'required|min:8',
+            'max_amount'    => 'required|numeric',
+            'coin_id'       => 'required|integer|exists:coins,id',
+            'country_id'    => 'required|integer|exists:countries,id',
+            'account_type'  => ['required', Rule::in(['user', 'agent'])],
         ];
     }
 }
