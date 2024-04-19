@@ -16,7 +16,7 @@ trait FileTrait
 
     public function FileExists(Request $request ,$requestColoumn, $coloumnName, $folderName, $diskName, $create= true, $model= null) {
         if (!empty($requestColoumn)) {
-            return $this->UploadPhoto($request, $folderName, $coloumnName, $diskName);
+            return $this->UploadFile($request, $folderName, $coloumnName, $diskName);
         }
         if ($create) {
             return null;

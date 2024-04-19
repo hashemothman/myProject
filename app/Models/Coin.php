@@ -14,6 +14,7 @@ class Coin extends Model
 
     protected $fillable = [
         'coin_name',
+        'country_flag',
     ];
 
     public function invoices(): HasMany
