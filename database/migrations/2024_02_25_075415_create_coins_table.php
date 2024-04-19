@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('coins', function (Blueprint $table) {
             $table->id();
             $table->string('coin_name');
+            $table->string('country_flag');
             $table->softDeletes();
             $table->timestamps();
         });

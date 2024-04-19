@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\API\CoinController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\API\MaxAmountController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,20 @@ Route::middleware('admin')->group(function () {
         Route::post('/creat_employee', [EmployeeController::class, 'store']);
         Route::post('/update_employee/{employee}', [EmployeeController::class, 'update']);
         Route::delete('/delete_employee/{employee}', [EmployeeController::class, 'destroy']);
+
+        ###########################################################################################################
+        ###########################################################################################################
+        ###########################################################################################################
+
+        ###########################################################################################################
+        ########################################### Coin CONTROLLER ###############################################
+        ###########################################################################################################
+
+        Route::get('/coins', [CoinController::class, 'index']);
+        Route::get('/coin/{coin}', [CoinController::class, 'show']);
+        Route::post('/creat_coin', [CoinController::class, 'store']);
+        Route::post('/update_coin/{coin}', [CoinController::class, 'update']);
+        Route::delete('/delete_coin/{coin}', [CoinController::class, 'destroy']);
 
         ###########################################################################################################
         ###########################################################################################################

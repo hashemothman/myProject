@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Coin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CoinRequest extends FormRequest
+class UpdateCoinRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class CoinRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'coin_name' => 'required|string|max:10',
+            'coin_name'    => 'nullable|string|max:25',
+            'country_flag' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048'
         ];
     }
 }

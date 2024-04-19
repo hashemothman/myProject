@@ -1,0 +1,155 @@
+diff --git a/app/Http/Controllers/API/CoinController.php b/app/Http/Controllers/API/CoinController.php
+index 5468787..084ca17 100644
+--- a/app/Http/Controllers/API/CoinController.php
++++ b/app/Http/Controllers/API/CoinController.php
+@@ -7,12 +7,15 @@
+ use App\Http\Requests\CoinRequest;
+ use Illuminate\Support\Facades\Log;
+ use App\Http\Controllers\Controller;
++use App\Http\Requests\Coin\StoreCoinRequest;
++use App\Http\Requests\Coin\UpdateCoinRequest;
+ use App\Http\Resources\CoinResource;
+ use App\Http\Traits\ApiResponseTrait;
++use App\Http\Traits\FileTrait;
+ 
+ class CoinController extends Controller
+ {
+-    use ApiResponseTrait;
++    use ApiResponseTrait, FileTrait;
+ 
+     /**
+      * Display a listing of the resource.
+@@ -26,11 +29,13 @@ public function index()
+     /**
+      * Store a newly created resource in storage.
+      */
+-    public function store(CoinRequest $request)
++    public function store(StoreCoinRequest $request)
+     {
+         try {
++            $country_flag_path  = $this->UploadFile($request, 'coins', 'country_flag', 'BasImage');
+             $coin = Coin::create([
+-                'coin_name' => $request->coin_name,
++                'coin_name'    => $request->coin_name,
++                'country_flag' => $country_flag_path
+             ]);
+             return $this->customeResponse(new CoinResource($coin), 'Coin Created Successfuly', 200);
+         } catch (\Throwable $th) {
+@@ -55,11 +60,13 @@ public function show(Coin $coin)
+     /**
+      * Update the specified resource in storage.
+      */
+-    public function update(CoinRequest $request, Coin $coin)
++    public function update(UpdateCoinRequest $request, Coin $coin)
+     {
+         try {
++            $country_flag_path = $this->FileExists($request, $request->country_flag, 'country_flag','coins','BasImage', false, $coin);
+             $coin->update([
+                 'coin_name' => $request->coin_name,
++                'country_flag' => $country_flag_path
+             ]);
+             return $this->customeResponse(new CoinResource($coin), 'Coin Updateded Successfuly', 200);
+         } catch (\Throwable $th) {
+diff --git a/app/Http/Requests/CoinRequest.php b/app/Http/Requests/CoinRequest.php
+deleted file mode 100644
+index 4067151..0000000
+--- a/app/Http/Requests/CoinRequest.php
++++ /dev/null
+@@ -1,28 +0,0 @@
+-<?php
+-
+-namespace App\Http\Requests;
+-
+-use Illuminate\Foundation\Http\FormRequest;
+-
+-class CoinRequest extends FormRequest
+-{
+-    /**
+-     * Determine if the user is authorized to make this request.
+-     */
+-    public function authorize(): bool
+-    {
+-        return true;
+-    }
+-
+-    /**
+-     * Get the validation rules that apply to the request.
+-     *
+-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+-     */
+-    public function rules(): array
+-    {
+-        return [
+-            'coin_name' => 'required|string|max:10',
+-        ];
+-    }
+-}
+diff --git a/app/Http/Traits/FileTrait.php b/app/Http/Traits/FileTrait.php
+index c66d2da..c8b4f79 100644
+--- a/app/Http/Traits/FileTrait.php
++++ b/app/Http/Traits/FileTrait.php
+@@ -16,7 +16,7 @@ public function UploadFile(Request $request, $folderName, $fileName, $diskName)
+ 
+     public function FileExists(Request $request ,$requestColoumn, $coloumnName, $folderName, $diskName, $create= true, $model= null) {
+         if (!empty($requestColoumn)) {
+-            return $this->UploadPhoto($request, $folderName, $coloumnName, $diskName);
++            return $this->UploadFile($request, $folderName, $coloumnName, $diskName);
+         }
+         if ($create) {
+             return null;
+diff --git a/app/Models/Coin.php b/app/Models/Coin.php
+index ebfd363..fdc9c29 100644
+--- a/app/Models/Coin.php
++++ b/app/Models/Coin.php
+@@ -14,6 +14,7 @@ class Coin extends Model
+ 
+     protected $fillable = [
+         'coin_name',
++        'country_flag',
+     ];
+ 
+     public function invoices(): HasMany
+diff --git a/database/migrations/2024_02_25_075415_create_coins_table.php b/database/migrations/2024_02_25_075415_create_coins_table.php
+index a2b9079..884ed6f 100644
+--- a/database/migrations/2024_02_25_075415_create_coins_table.php
++++ b/database/migrations/2024_02_25_075415_create_coins_table.php
+@@ -14,6 +14,7 @@ public function up(): void
+         Schema::create('coins', function (Blueprint $table) {
+             $table->id();
+             $table->string('coin_name');
++            $table->string('country_flag');
+             $table->softDeletes();
+             $table->timestamps();
+         });
+diff --git a/routes/admin.php b/routes/admin.php
+index bdc7fb9..df4924e 100644
+--- a/routes/admin.php
++++ b/routes/admin.php
+@@ -1,6 +1,7 @@
+ <?php
+ 
+ use App\Http\Controllers\API\AdminController;
++use App\Http\Controllers\API\CoinController;
+ use App\Http\Controllers\Api\EmployeeController;
+ use App\Http\Controllers\API\MaxAmountController;
+ use Illuminate\Support\Facades\Route;
+@@ -52,5 +53,19 @@
+         ###########################################################################################################
+         ###########################################################################################################
+         ###########################################################################################################
++
++        ###########################################################################################################
++        ########################################### Coin CONTROLLER ###############################################
++        ###########################################################################################################
++
++        Route::get('/coins', [CoinController::class, 'index']);
++        Route::get('/coin/{coin}', [CoinController::class, 'show']);
++        Route::post('/creat_coin', [CoinController::class, 'store']);
++        Route::post('/update_coin/{coin}', [CoinController::class, 'update']);
++        Route::delete('/delete_coin/{coin}', [CoinController::class, 'destroy']);
++
++        ###########################################################################################################
++        ###########################################################################################################
++        ###########################################################################################################
+     });
+ });
