@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -40,6 +41,7 @@ class TransactionController extends Controller
                 'amount'              => $request->amount,
                 'date'                => $request->date,
             ]);
+            return $this->customeResponse(TransactionResource::collection($transaction),"Done",200);
         } catch (\Throwable $th) {
             Log::error($th);
             return $this->customeResponse(null,"Error, There somthing Rong here",500);

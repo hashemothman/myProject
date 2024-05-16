@@ -26,7 +26,7 @@ class Account extends Model
     }
 
 
-    public function reports(): HasMany
+    public function reports()
     {
         return $this->hasMany(Report::class, 'account_id', 'id');
     }
