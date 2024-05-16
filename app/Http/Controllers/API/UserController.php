@@ -16,6 +16,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Traits\WalletAndAccountTrait;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Wallet\StoreWalletRequest;
 
 class UserController extends Controller
 {
