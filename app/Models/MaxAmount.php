@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class MaxAmount extends Model
 {
@@ -18,6 +19,15 @@ class MaxAmount extends Model
         'account_type',
         'max_amount',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($max_amount) {
+            $max_amount->user_id = Auth::user()->id;
+        });
+    }
 
     public function user(): BelongsTo
     {
