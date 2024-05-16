@@ -40,6 +40,8 @@ class TransactionController extends Controller
                 'coin_id'             => $request->coin_id,
                 'reciever_account'    => $request->reciever_account,
                 'amount'              => $request->amount,
+                // TODO :type
+                // 'type'              => $request->type,
                 'date'                => $request->date,
             ]);
             return $this->customeResponse(TransactionResource::collection($transaction),"Done",200);

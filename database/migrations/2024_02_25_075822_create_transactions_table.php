@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('coin_id')->constrained('coins')->cascadeOnDelete();
-            $table->string('sender');
+            $table->integer('sender');
             $table->string('reciever_account');
             $table->decimal('amount');
+            // $table->enum('type', ['internal', 'external']);
             $table->date('date');
             $table->softDeletes();
             $table->timestamps();

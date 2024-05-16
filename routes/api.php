@@ -1,18 +1,22 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Api\InvoiceController;
-use App\Http\Controllers\Api\OfficeInfoController;
-use App\Http\Controllers\API\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ReportController;
 use App\Http\Controllers\API\AccountController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\API\ComplainController;
+
+use App\Http\Controllers\API\UserInfoController;
+use App\Http\Controllers\Api\OfficeInfoController;
+use App\Http\Controllers\API\TransactionController;
+
 use App\Http\Controllers\API\WalletController;
 use App\Http\Controllers\MarketerAccountInfoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +76,7 @@ Route::middleware('jwt.verify')->group(function () {
     
 // TODO : routes
 
+    Route::post('/store-transacrion', [TransactionController::class,'store'])->middleware('daily.transfer.limit');
 
 
 
