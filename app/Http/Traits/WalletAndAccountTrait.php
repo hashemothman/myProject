@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 
+use App\Models\Account;
+use App\Models\AdminWallet;
 use App\Models\Wallet;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -9,7 +11,6 @@ use Illuminate\Support\Facades\Log;
 
 trait WalletAndAccountTrait
 {
-
     public function createDolarWallet($wallet_request){
         try {
             $wallet = new wallet();
@@ -20,9 +21,34 @@ trait WalletAndAccountTrait
             return $wallet;
         } catch (\Throwable $th) {
             Log::error($th);
-            throw $e;
+            throw $th;
         }
     }
+    public function createDolarAdminWallet(){
+        try {
+            $wallet = new AdminWallet();
+            $wallet->amount        = 0;
+            $wallet->coin_id = 1; //Dolar
+            $wallet->save();
+            return $wallet;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            throw $th;
+        }
+    }
+    public function createSPAdminWallet(){
+        try {
+            $wallet = new AdminWallet();
+            $wallet->amount        = 0;
+            $wallet->coin_id = 2; //SP
+            $wallet->save();
+            return $wallet;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            throw $th;
+        }
+    }
+
     public function createAccount($user_id, $account_request)
     {
         DB::beginTransaction();

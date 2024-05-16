@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 class Complain extends Model
 {
@@ -30,7 +31,7 @@ class Complain extends Model
         static::creating(function ($complain) {
             $complain->user_id = Auth::user()->id;
             $complain->complain_number = (string) Str::uuid();
-            return true; 
+            return true;
         });
     }
 }
