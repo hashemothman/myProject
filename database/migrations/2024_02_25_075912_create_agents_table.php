@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('location_id')->constrained('locations')->cascadeOnDelete();
             $table->foreignId('maxAmount_id')->constrained('max_amounts')->cascadeOnDelete();
             $table->string('agent_name');
+            // TODO:what is type
+            $table->string('type');
             $table->softDeletes();
             $table->timestamps();
         });

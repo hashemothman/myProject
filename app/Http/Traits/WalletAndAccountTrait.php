@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\Wallet;
+use App\Models\Account;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -20,7 +21,7 @@ trait WalletAndAccountTrait
             return $wallet;
         } catch (\Throwable $th) {
             Log::error($th);
-            throw $e;
+            throw $th;
         }
     }
     public function createAccount($user_id, $account_request)
