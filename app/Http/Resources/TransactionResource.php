@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Coin;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\CoinResource;
 use Illuminate\Http\Resources\Json\JsonResource;

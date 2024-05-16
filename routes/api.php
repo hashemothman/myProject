@@ -69,6 +69,9 @@ Route::middleware('jwt.verify')->group(function () {
     Route::delete('/delete-reports/{reports}', [ReportController::class, 'destroy']);
 
 
+    
+// TODO : routes
+
 
 
 
