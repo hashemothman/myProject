@@ -5,7 +5,6 @@ namespace App\Http\Traits;
 use App\Models\Account;
 use App\Models\AdminWallet;
 use App\Models\Wallet;
-use App\Models\Account;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
