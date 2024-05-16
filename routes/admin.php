@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminWalletController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\CoinController;
 use App\Http\Controllers\Api\EmployeeController;
@@ -10,6 +11,8 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\WalletController;
 
 Route::middleware('admin')->group(function () {
+    Route::get('/coin/{coin}', [CoinController::class, 'show']);
+
 
     Route::post('/login', [AdminController::class, 'login']);
 
@@ -59,10 +62,23 @@ Route::middleware('admin')->group(function () {
         ###########################################################################################################
 
         Route::get('/coins', [CoinController::class, 'index']);
-        Route::get('/coin/{coin}', [CoinController::class, 'show']);
         Route::post('/creat_coin', [CoinController::class, 'store']);
         Route::post('/update_coin/{coin}', [CoinController::class, 'update']);
         Route::delete('/delete_coin/{coin}', [CoinController::class, 'destroy']);
+
+        ###########################################################################################################
+        ###########################################################################################################
+        ###########################################################################################################
+
+        ###########################################################################################################
+        ####################################### Admin Wallet CONTROLLER ###########################################
+        ###########################################################################################################
+
+        Route::get('/adminWallets', [AdminWalletController::class, 'index']);
+        Route::get('/adminWallet/{adminWallet}', [AdminWalletController::class, 'show']);
+        Route::post('/creat_adminWallet', [AdminWalletController::class, 'store']);
+        Route::post('/update_adminWallet/{adminWallet}', [AdminWalletController::class, 'update']);
+        Route::delete('/delete_adminWallet/{adminWallet}', [AdminWalletController::class, 'destroy']);
 
         ###########################################################################################################
         ###########################################################################################################
