@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Facades\Auth;
+use App\Observers\TransactionObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,8 @@ class Transaction extends Model
         'sender',
         'reciever_account',
         'amount',
+        // TODO: type of operation 
+        // 'type',
         'date',
     ];
 
@@ -32,5 +35,10 @@ class Transaction extends Model
             $transaction->sender = Auth::user()->id;
             return true;
         });
+        self::observe(TransactionObserver::class);
+
     }
+
+
+
 }
