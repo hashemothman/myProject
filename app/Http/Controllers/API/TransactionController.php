@@ -10,6 +10,7 @@ use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Requests\UpdateTransactionRequest;
+use App\Models\Transaction;
 
 class TransactionController extends Controller
 {
@@ -37,7 +38,7 @@ class TransactionController extends Controller
         try {
             $transaction = Transaction::create([
                 'coin_id'             => $request->coin_id,
-                'reciever_account'       => $request->reciever_account,
+                'reciever_account'    => $request->reciever_account,
                 'amount'              => $request->amount,
                 // TODO :type
                 // 'type'              => $request->type,

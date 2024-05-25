@@ -12,11 +12,15 @@ use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\API\PercentController;
 use App\Http\Controllers\API\UserLogController;
 use App\Http\Controllers\API\ComplainController;
-use App\Http\Controllers\Api\EmployeeController;
+
 use App\Http\Controllers\API\UserInfoController;
 use App\Http\Controllers\Api\OfficeInfoController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\BusinessAccountController;
+
+use App\Http\Controllers\API\WalletController;
+use App\Http\Controllers\MarketerAccountInfoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -139,5 +143,32 @@ Route::middleware('jwt.verify')->group(function () {
 
 
 
-});
+    ###########################################################################################################
+    ########################################## Wallet CONTROLLER ##############################################
+    ###########################################################################################################
 
+    Route::get('/Wallets', [WalletController::class, 'index']);
+    Route::get('/Wallet/{Wallet}', [WalletController::class, 'show']);
+    Route::post('/creat_Wallet', [WalletController::class, 'store']);
+    Route::post('/update_Wallet/{Wallet}', [WalletController::class, 'update']);
+    Route::delete('/delete_Wallet/{Wallet}', [WalletController::class, 'destroy']);
+
+    ###########################################################################################################
+    ###########################################################################################################
+    ###########################################################################################################
+
+    ###########################################################################################################
+    ################################## Marketer Account Info CONTROLLER #######################################
+    ###########################################################################################################
+
+    Route::get('/marketer-account-infos', [MarketerAccountInfoController::class, 'index']);
+    Route::get('/marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'show']);
+    Route::post('/creat_marketer-account-info', [MarketerAccountInfoController::class, 'store']);
+    Route::post('/update_marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'update']);
+    Route::delete('/delete_marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'destroy']);
+
+    ###########################################################################################################
+    ###########################################################################################################
+    ###########################################################################################################
+
+});
