@@ -1,13 +1,15 @@
 <?php
 
-use App\Http\Controllers\API\AdminController;
-use App\Http\Controllers\API\CoinController;
-use App\Http\Controllers\Api\EmployeeController;
-use App\Http\Controllers\API\MaxAmountController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\API\CoinController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\WalletController;
+use App\Http\Controllers\API\PercentController;
+use App\Http\Controllers\API\UserLogController;
+use App\Http\Controllers\Api\EmployeeController;
+use App\Http\Controllers\API\MaxAmountController;
 
 Route::middleware('admin')->group(function () {
 
@@ -37,7 +39,7 @@ Route::middleware('admin')->group(function () {
         //End Wallet Route
 
         //Max Amount Route
-        Route::apiResource('max_amoun', MaxAmountController::class);
+        Route::apiResource('max_amount', MaxAmountController::class);
         //End Max Amount Route
 
         ###########################################################################################################
@@ -67,5 +69,13 @@ Route::middleware('admin')->group(function () {
         ###########################################################################################################
         ###########################################################################################################
         ###########################################################################################################
+
+
+        #################### Percent Controller  ##########################
+        Route::apiResource('percents', PercentController::class);
+        ############################################################################
+        
+        Route::apiResource('userlogs', UserLogController::class);
+
     });
 });
