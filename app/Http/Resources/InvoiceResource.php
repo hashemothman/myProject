@@ -14,6 +14,8 @@ class InvoiceResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            // TODO : hello
+        ];
     }
 }

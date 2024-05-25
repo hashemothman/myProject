@@ -15,7 +15,7 @@ class AccountResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user_id = User::where('id',$this->user_id)>first();
+        $user_id = User::where('id',$this->user_id)->first();
         return [
             'id'           => $this->id,
             'user_id'      => $user_id,

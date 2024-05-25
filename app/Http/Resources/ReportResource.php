@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Account;
 use Illuminate\Http\Request;
 use App\Http\Resources\AccountResource;
 use App\Models\Account;

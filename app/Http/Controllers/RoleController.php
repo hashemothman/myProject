@@ -12,13 +12,15 @@ use Spatie\Permission\Models\Permission;
 class RoleController extends Controller
 {
     use ApiResponseTrait;
-    // function __construct()
-    // {
-    //     $this->middleware(['permission:role-list|role-create|role-edit|role-delete'], ['only' => ['index', 'store']]);
-    //     $this->middleware(['permission:role-create'], ['only' => ['create', 'store']]);
-    //     $this->middleware(['permission:role-edit'], ['only' => ['edit', 'update']]);
-    //     $this->middleware(['permission:role-delete'], ['only' => ['destroy']]);
-    // }
+    function __construct()
+    {
+        $this->middleware(['permission:role-list'], ['only' => ['index', 'show']]);
+        $this->middleware(['permission:role-create'], ['only' => ['store']]);
+        $this->middleware(['permission:role-edit'], ['only' => ['update']]);
+        $this->middleware(['permission:role-delete'], ['only' => ['destroy']]);
+    }
+
+
     /**
      * Display a listing of the resource.
      */
@@ -64,10 +66,10 @@ class RoleController extends Controller
             $role->update([
                 "name"=> $request->input("name"),
             ]);
-            
+
             $role->syncPermissions($request->input('permission'));
 
-            
+
             // if ($request->has('permission')) {
             //     $role->permissions()->detach();
             //     $role->permissions()->attach($request->input('permission'));

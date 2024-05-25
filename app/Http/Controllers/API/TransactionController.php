@@ -64,17 +64,4 @@ class TransactionController extends Controller
         }
     }
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  */
-    // public function destroy(Transaction $transaction)
-    // {
-    //     try {
-    //         $transaction->delete();
-    //         return $this->customeResponse("","Transaction deleted successfully",200);
-    //     } catch (\Throwable $th) {
-    //         Log::error($th);
-    //         return $this->customeResponse(null,"Error, There somthing Rong here",500);
-    //     }
-    // }
 }

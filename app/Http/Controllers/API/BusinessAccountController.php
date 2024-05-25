@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\UserLog;
 use Illuminate\Http\Request;
 use App\Models\BussinessAccount;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +32,7 @@ class BusinessAccountController extends Controller
     {
         try {
             $logo = $this->UploadFile($request, 'business_accounts', 'logo', 'BasImage');
-            $user_log = UserLog::create([
+            $business_account = BussinessAccount::create([
                 'company_name'            => $request->company_name,
                 'logo'                    => $request->logo,
                 'commercial_record'       => $request->commercial_record,
