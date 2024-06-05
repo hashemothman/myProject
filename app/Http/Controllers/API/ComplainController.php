@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\ComplainRequest;
 use App\Http\Resources\ComplainResource;
+use App\Http\Requests\UpdateComplainRequest;
 
 class ComplainController extends Controller
 {
@@ -32,7 +33,7 @@ class ComplainController extends Controller
         $validated = $request->validated();
         $complain = Complain::create([
             'body'            => $request->body,
-            'status'          => $request->status,
+            'status'            => 'pending',
         ]);
         return $this->customeResponse(new ComplainResource($complain), 'complain Created Successfuly', 200);
     }
@@ -43,24 +44,25 @@ class ComplainController extends Controller
     public function show(Complain $complain)
     {
         if($complain){
-            return $this->customResponse(new ComplainResource($complain),"successfully",200);
+            return $this->customeResponse(new ComplainResource($complain),"successfully",200);
         }
-        return $this->customResponse(null,"complain not found",404);
+        return $this->customeResponse(null,"complain not found",404);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(ComplainRequest $request,Complain $complain)
+    public function update(UpdateComplainRequest $request,Complain $complain)
     {
-        if ($complain){
-            $complain->update([
-                'body'            => $request->body,
-                'status'          => $request->status,
-            ]);
-            return $this->customResponse(new ComplainResource($complain),"complain updated successfully",200);
+        try {
+            $complain->body = $request->input('body') ?? $complain->body;
+            $complain->status = $request->input('status') ?? $complain->status;
+            $complain->save();
+            return $this->customeResponse(new ComplainResource($complain),"complain updated successfully",200);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->customeResponse(null,"there is something error",500);
         }
-        return $this->customResponse(null,"complain not found",404);
     }
 
     /**
@@ -70,7 +72,7 @@ class ComplainController extends Controller
     {
         if($complain){
             $complain->delete();
-            return $this->customResponse("","complain deleted successfully",200);
+            return $this->customeResponse("","complain deleted successfully",200);
         }
         return $this->customResponse(null,"complain not found",404);
     }

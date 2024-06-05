@@ -24,7 +24,7 @@ class OfficeInfoRequest extends FormRequest
         return [
             'city_id'  => 'required|integer|exists:cities,id',
             'name'     => 'required|string',
-            'location' => 'required|location'
+            'location' => 'required|string'
         ];
     }
 }

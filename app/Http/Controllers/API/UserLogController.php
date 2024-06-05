@@ -75,7 +75,8 @@ class UserLogController extends Controller
 
         } catch (\Throwable $th) {
             Log::error($th);
-            return $this->customeResponse(null,"Error, There somthing Rong here",500);        }
+            return $this->customeResponse(null,"Error, There somthing Rong here",500);
+        }
     }
 
     /**
