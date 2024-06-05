@@ -16,6 +16,7 @@ class Wallet extends Model
         'user_id',
         'coin_id',
         'max_amount_id',
+        'country_id',
         'amount',
     ];
 

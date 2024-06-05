@@ -4,16 +4,18 @@ namespace App\Http\Controllers\API;
 
 use App\Models\UserLog;
 use Illuminate\Http\Request;
+use App\Http\Traits\FileTrait;
 use App\Models\BussinessAccount;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\BusinessAccountRequest;
 use App\Http\Resources\BusinessAccountResource;
+use App\Http\Requests\UpdateBusinessAccountRequest;
 
 class BusinessAccountController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait,FileTrait;
     /**
      * Display a listing of the resource.
      */
@@ -34,7 +36,7 @@ class BusinessAccountController extends Controller
             $logo = $this->UploadFile($request, 'business_accounts', 'logo', 'BasImage');
             $business_account = BussinessAccount::create([
                 'company_name'            => $request->company_name,
-                'logo'                    => $request->logo,
+                'logo'                    => $logo,
                 'commercial_record'       => $request->commercial_record,
                 'validity_period'         => $request->validity_period,
             ]);
@@ -63,7 +65,7 @@ class BusinessAccountController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BussinessAccount $business_account)
+    public function update(UpdateBusinessAccountRequest $request, BussinessAccount $business_account)
     {
         try {
             $logo = $this->FileExists($request,$request->file,'logo','business_accounts','BasImage', false, $business_account);

@@ -1,19 +1,19 @@
 <?php
 
-use App\Http\Controllers\AdminWalletController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\API\CoinController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\WalletController;
+use App\Http\Controllers\AdminWalletController;
 use App\Http\Controllers\API\PercentController;
 use App\Http\Controllers\API\UserLogController;
+use App\Http\Controllers\API\ComplainController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\API\MaxAmountController;
 
 Route::middleware('admin')->group(function () {
-    Route::get('/coin/{coin}', [CoinController::class, 'show']);
 
 
     Route::post('/login', [AdminController::class, 'login']);
@@ -45,6 +45,15 @@ Route::middleware('admin')->group(function () {
         Route::apiResource('max_amount', MaxAmountController::class);
         //End Max Amount Route
 
+
+        ####################### complain ###########################
+        Route::get('/complains', [ComplainController::class, 'index']);
+        Route::get('/complain/{complain}', [ComplainController::class, 'show']);
+        Route::put('/update-complain/{complain}', [ComplainController::class, 'update']);
+        Route::delete('/delete-complain/{complain}', [ComplainController::class, 'destroy']);
+
+
+        
         ###########################################################################################################
         ########################################## Employee CONTROLLER ############################################
         ###########################################################################################################
@@ -64,6 +73,7 @@ Route::middleware('admin')->group(function () {
         ###########################################################################################################
 
         Route::get('/coins', [CoinController::class, 'index']);
+        Route::get('/coin/{coin}', [CoinController::class, 'show']);
         Route::post('/creat_coin', [CoinController::class, 'store']);
         Route::post('/update_coin/{coin}', [CoinController::class, 'update']);
         Route::delete('/delete_coin/{coin}', [CoinController::class, 'destroy']);
@@ -77,7 +87,7 @@ Route::middleware('admin')->group(function () {
         #################### Percent Controller  ##########################
         Route::apiResource('percents', PercentController::class);
         ############################################################################
-        
+
         Route::apiResource('userlogs', UserLogController::class);
 
 

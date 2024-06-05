@@ -60,11 +60,7 @@ Route::middleware('jwt.verify')->group(function () {
     ###########################################################
     ##################### complain #############################
     ###########################################################
-    Route::get('/complains', [ComplainController::class, 'index']);
     Route::post('/create-complain', [ComplainController::class, 'store']);
-    Route::get('/complain/{complain}', [ComplainController::class, 'show']);
-    Route::put('/update-complain/{complain}', [ComplainController::class, 'update']);
-    Route::delete('/delete-complain/{complain}', [ComplainController::class, 'destroy']);
 
 
     ###########################################################
@@ -89,7 +85,7 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/userInfos', [UserInfoController::class, 'index']);
     Route::get('/userInfo/{userInfo}', [UserInfoController::class, 'show']);
     Route::post('/creat_userInfo', [UserInfoController::class, 'store']);
-    Route::post('/update_userInfo/{userInfo}', [UserInfoController::class, 'update']);
+    Route::put('/update_userInfo/{userInfo}', [UserInfoController::class, 'update']);
     Route::delete('/delete_userInfo/{userInfo}', [UserInfoController::class, 'destroy']);
 
     ###########################################################################################################
@@ -103,7 +99,7 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/invoices', [InvoiceController::class, 'index']);
     Route::get('/invoice/{invoice}', [InvoiceController::class, 'show']);
     Route::post('/creat_invoice', [InvoiceController::class, 'store']);
-    Route::post('/update_invoice/{invoice}', [InvoiceController::class, 'update']);
+    Route::put('/update_invoice/{invoice}', [InvoiceController::class, 'update']);
     Route::delete('/delete_invoice/{invoice}', [InvoiceController::class, 'destroy']);
 
     ###########################################################################################################
@@ -117,12 +113,12 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/officeInfos', [OfficeInfoController::class, 'index']);
     Route::get('/officeInfo/{officeInfo}', [OfficeInfoController::class, 'show']);
     Route::post('/creat_officeInfo', [OfficeInfoController::class, 'store']);
-    Route::post('/update_officeInfo/{officeInfo}', [OfficeInfoController::class, 'update']);
+    Route::put('/update_officeInfo/{officeInfo}', [OfficeInfoController::class, 'update']);
     Route::delete('/delete_officeInfo/{officeInfo}', [OfficeInfoController::class, 'destroy']);
 
     ###########################################################################################################
     ###########################################################################################################
-  
+
 
 
     #################### Business Account Controller ##########################
@@ -147,11 +143,11 @@ Route::middleware('jwt.verify')->group(function () {
     ########################################## Wallet CONTROLLER ##############################################
     ###########################################################################################################
 
-    Route::get('/Wallets', [WalletController::class, 'index']);
-    Route::get('/Wallet/{Wallet}', [WalletController::class, 'show']);
-    Route::post('/creat_Wallet', [WalletController::class, 'store']);
-    Route::post('/update_Wallet/{Wallet}', [WalletController::class, 'update']);
-    Route::delete('/delete_Wallet/{Wallet}', [WalletController::class, 'destroy']);
+    // Route::get('/Wallets', [WalletController::class, 'index']);
+    // Route::get('/Wallet/{Wallet}', [WalletController::class, 'show']);
+    // Route::post('/creat_Wallet', [WalletController::class, 'store']);
+    // Route::put('/update_Wallet/{Wallet}', [WalletController::class, 'update']);
+    // Route::delete('/delete_Wallet/{Wallet}', [WalletController::class, 'destroy']);
 
     ###########################################################################################################
     ###########################################################################################################
@@ -164,7 +160,7 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/marketer-account-infos', [MarketerAccountInfoController::class, 'index']);
     Route::get('/marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'show']);
     Route::post('/creat_marketer-account-info', [MarketerAccountInfoController::class, 'store']);
-    Route::post('/update_marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'update']);
+    Route::put('/update_marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'update']);
     Route::delete('/delete_marketer-account-info/{marketer-account-info}', [MarketerAccountInfoController::class, 'destroy']);
 
     ###########################################################################################################

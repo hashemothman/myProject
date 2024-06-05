@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\UserInfo;
+use App\Http\Traits\FileTrait;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\UserInfoRequest;
 use App\Http\Resources\UserInfoResource;
-use App\Http\Traits\ApiResponseTrait;
-use App\Http\Traits\FileTrait;
-use App\Models\UserInfo;
+use App\Http\Requests\UpdateUserInfoRequest;
 
 class UserInfoController extends Controller
 {
@@ -62,7 +63,7 @@ class UserInfoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserInfoRequest $request, UserInfo $userInfo)
+    public function update(UpdateUserInfoRequest $request, UserInfo $userInfo)
     {
         if (!$userInfo) {
             return $this->customeResponse(null, 'Not Found', 404);
@@ -71,16 +72,13 @@ class UserInfoController extends Controller
         $photo_path            = $this->FileExists($request, $request->photo, 'photo','userInfos','BasImage', false, $userInfo);
         $front_card_image_path = $this->FileExists($request, $request->front_card_image, 'front_card_image','userInfos','BasImage', false, $userInfo);
         $back_card_image_path  = $this->FileExists($request, $request->back_card_image, 'back_card_image','userInfos','BasImage', false, $userInfo);
-
-        $userInfo->update([
-            'city_id'          => $request->city_id,
-            'fullName'         => $request->fullName,
-            'idNumber'         => $request->idNumber,
-            'photo'            => $photo_path,
-            'front_card_image' => $front_card_image_path,
-            'back_card_image'  => $back_card_image_path
-        ]);
-
+        $userInfo->city_id = $request->input('city_id') ?? $userInfo->city_id;
+        $userInfo->fullName = $request->input('fullName') ?? $userInfo->fullName;
+        $userInfo->idNumber = $request->input('idNumber') ?? $userInfo->idNumber;
+        $userInfo->photo = $photo_path;
+        $userInfo->front_card_image = $front_card_image_path;
+        $userInfo->back_card_image = $back_card_image_path;
+        $userInfo->save();
         return $this->customeResponse(new UserinfoResource($userInfo), 'Successfully Updated', 200);
     }
 
