@@ -6,12 +6,12 @@ use App\Http\Resources\CategoryResource;
 
 trait ApiResponseTrait
 {
-    public function apiResponse($data,$token,$message,$status){
+    public function apiResponse($data,$message,$status){
 
         $array = [
             'data' =>$data,
             'message' =>$message,
-            'access_token' => $token,
+            // 'access_token' => $token,
             'token_type' => 'Bearer',
         ];
 
