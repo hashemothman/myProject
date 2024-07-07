@@ -48,19 +48,28 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
-        $data = new UserResource($user);
-        return $this->apiResponse($data, $token, 'User Login successfully', 200);
+        $data = [new UserResource($user), $token];
+        return $this->apiResponse($data, 'User Login successfully', 200);
     }
 
     public function register(UserRegisterRequest $request)
     {
-        $user = User::create([
-            'email'         => $request->email,
-            'mobile_number' => $request->mobile_number,
-            'password'      => Hash::make($request->password),
-        ]);
+        if($request->has('mobile_number')){
+            $user = User::create([
+                'mobile_number' => $request->mobile_number,
+                'password'      => Hash::make($request->password),
+            ]);
+        }
+        if($request->has('email')){
+            $user = User::create([
+                'email'         => $request->email,
+                'password'      => Hash::make($request->password),
+            ]);
+        }
 
-        $data = new UserResource($user);
+        $token = Auth::login($user);
+
+        $data = ['user'=>new UserResource($user),'token'=>$token];
         return $this->customeResponse($data, 'User Register successfully', 201);
     }
 
