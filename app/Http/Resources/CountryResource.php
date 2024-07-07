@@ -3,10 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\CityResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OfficeInfoResource extends JsonResource
+class CountryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +15,7 @@ class OfficeInfoResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name'     => $this->name,
-            'city'     => new CityResource($this->city),
-            'location' => $this->location,
+            'name' => $this->name
         ];
     }
 }

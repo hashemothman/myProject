@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Http\Traits\WalletAndAccountTrait;
 use Illuminate\Database\Seeder;
+use Database\Seeders\CitySeeder;
 
 use Database\Seeders\CoinSeeder;
 use Database\Seeders\RoleSeeder;
@@ -13,8 +13,10 @@ use Database\Seeders\AdminsSeeder;
 
 use Illuminate\Support\Facades\DB;
 
+use Database\Seeders\CountrySeeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\PermissionSeeder;
+use App\Http\Traits\WalletAndAccountTrait;
 use Database\Seeders\AssignPermissionsSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -40,6 +42,8 @@ class DatabaseSeeder extends Seeder
             AssignPermissionsSeeder::class,
             AdminsSeeder::class,
             CoinSeeder::class,
+            CitySeeder::class,
+            CountrySeeder::class,
         ]);
 
         try {

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('complains', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->integer('complain_number');
+            $table->string('complain_number');
             $table->string('body');
             $table->enum('status', ['pending', 'done'])->default('pending');
             $table->softDeletes();

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\CityResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserInfoResource extends JsonResource
@@ -18,7 +19,7 @@ class UserInfoResource extends JsonResource
         $city = $this->city;
         return [
             'user'             => new UserResource($user),
-            'city'             => $city,
+            'city'             => new CityResource($city),
             'fullName'         => $this->fullName,
             'idNumber'         => $this->idNumber,
             'photo'            => asset('photos/' . $this->photo) ,

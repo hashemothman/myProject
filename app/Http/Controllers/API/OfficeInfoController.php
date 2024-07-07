@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\OfficeInfoRequest;
-use App\Http\Resources\OfficeInfoResource;
-use App\Http\Traits\ApiResponseTrait;
 use App\Models\OfficeInfo;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Traits\ApiResponseTrait;
+use App\Http\Requests\OfficeInfoRequest;
+use App\Http\Resources\OfficeInfoResource;
+use App\Http\Requests\UpdateOfficeInfoRequest;
 
 class OfficeInfoController extends Controller
 {
@@ -55,18 +56,15 @@ class OfficeInfoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(OfficeInfoRequest $request, OfficeInfo $officeInfo)
+    public function update(UpdateOfficeInfoRequest $request, OfficeInfo $officeInfo)
     {
         if (!$officeInfo) {
             return $this->customeResponse(null, 'Not Found', 404);
         }
-
-        $officeInfo->update([
-            'name'     => $request->name,
-            'city_id'  => $request->city_id,
-            'location' => $request->location,
-        ]);
-
+        $officeInfo->name = $request->input('name') ?? $officeInfo->name;
+        $officeInfo->city_id = $request->input('city_id') ?? $officeInfo->city_id;
+        $officeInfo->location = $request->input('location') ?? $officeInfo->location;
+        $officeInfo->save();
         return $this->customeResponse(new OfficeInfoResource($officeInfo), 'Successfully Updated', 200);
     }
 

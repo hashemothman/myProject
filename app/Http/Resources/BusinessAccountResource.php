@@ -19,7 +19,7 @@ class BusinessAccountResource extends JsonResource
         return [
             'user'                  => new UserResource($user),
             'company_name'          =>$this->company_name,
-            // 'logo'                  =>$this->logo,
+            'logo'                  =>asset('photos/' . $this->logo) ,
             'commercial_record'     =>$this->commercial_record,
             'validity_period'       =>$this->validity_period,
         ];

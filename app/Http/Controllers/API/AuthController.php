@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\UserLoginRequest;
-use App\Http\Requests\Auth\UserRegisterRequest;
-use App\Http\Resources\UserResource;
-use App\Http\Traits\ApiResponseTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Traits\ApiResponseTrait;
+use App\Http\Traits\WalletAndAccountTrait;
+use App\Http\Requests\Auth\UserLoginRequest;
+use App\Http\Requests\Auth\UserRegisterRequest;
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait,WalletAndAccountTrait;
 
 
     /**
@@ -54,6 +56,7 @@ class AuthController extends Controller
 
     public function register(UserRegisterRequest $request)
     {
+
         if($request->has('mobile_number')){
             $user = User::create([
                 'mobile_number' => $request->mobile_number,
@@ -70,6 +73,7 @@ class AuthController extends Controller
         $token = Auth::login($user);
 
         $data = ['user'=>new UserResource($user),'token'=>$token];
+
         return $this->customeResponse($data, 'User Register successfully', 201);
     }
 
