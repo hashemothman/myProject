@@ -11,7 +11,7 @@ class UpdateBusinessAccountRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,10 +22,10 @@ class UpdateBusinessAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_name' => 'nullable|string|max:255',
-            'logo' => 'nullable|string',
+            'company_name'      => 'nullable|string|max:255',
+            'logo'              => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'commercial_record' => 'nullable|string',
-            'validity_period' => 'nullable|date',
+            'validity_period'   => 'nullable|date',
         ];//
     }
 }

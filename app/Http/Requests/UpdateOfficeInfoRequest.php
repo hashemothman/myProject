@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class InvoiceRequest extends FormRequest
+class UpdateOfficeInfoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,9 @@ class InvoiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'officeInfo_id'    => 'required|integer|exists:office_infos,id',
-            'coin_id'          => 'required|integer|exists:coins,id',
-            'invoice_number'   => 'required|integer',
-            'date'             => 'required|date',
-            'invoices_value'   => 'required|integer|regex:/^\d*(\.\d{1,2})?$/',
-            'file'             => 'nullable|mimes:pdf,doc,docx|max:2048',
+            'city_id'  => 'nullable|integer|exists:cities,id',
+            'name'     => 'nullable|string',
+            'location' => 'nullable|string'
         ];
     }
 }

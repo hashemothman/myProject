@@ -22,8 +22,7 @@ class ComplainRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'body' => 'required|string',
-            'status' => 'required|string'
+            'body' => 'required|string|max:2048',
         ];
     }
 }

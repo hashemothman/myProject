@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class UserInfo extends Model
 {
@@ -27,7 +28,21 @@ class UserInfo extends Model
         parent::boot();
 
         self::creating(function ($userInfo) {
-            $userInfo->user_id = Auth::user()->id;
+            $authUser = Auth::guard('api')->user();
+            if ($authUser) {
+                $user_id = $authUser->id;
+                $user = User::find($user_id);
+                
+                if ($user) {
+                    $userInfo->user_id = $user->id;
+                } else {
+                    Log::error('User not found with ID: ' . $user_id);
+                    throw new \Exception('User not found.');
+                }
+            } else {
+                Log::error('No authenticated user found.');
+                throw new \Exception('No authenticated user found.');
+            }
         });
     }
 

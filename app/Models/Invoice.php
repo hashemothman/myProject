@@ -24,4 +24,7 @@ class Invoice extends Model
     {
         return $this->belongsTo(OfficeInfo::class, 'officeInfo_id');
     }
+
+
+    
 }

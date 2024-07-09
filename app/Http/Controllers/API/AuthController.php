@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+
+
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
@@ -12,10 +15,12 @@ use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\Auth\UserLoginRequest;
 use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Http\Requests\Auth\UserPhoneRegisterRequest;
+use App\Http\Traits\WalletAndAccountTrait;
+
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait;
+    use ApiResponseTrait,WalletAndAccountTrait;
 
 
     /**
@@ -56,7 +61,6 @@ class AuthController extends Controller
     public function register(UserRegisterRequest $request)
     {
 
-
             $user = User::create([
                 'email'         => $request->email,
                 'password'      => Hash::make($request->password),
@@ -81,6 +85,7 @@ class AuthController extends Controller
         $token = Auth::login($user);
 
         $data = ['user'=>new UserResource($user),'token'=>$token];
+
         return $this->customeResponse($data, 'User Register successfully', 201);
     }
 

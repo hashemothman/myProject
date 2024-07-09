@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('coin_id')->constrained('coins')->cascadeOnDelete();
             $table->foreignId('max_amount_id')->constrained('max_amounts')->cascadeOnDelete();
+            $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->decimal('amount');
             $table->softDeletes();
             $table->timestamps();

@@ -59,11 +59,11 @@ class AccountController extends Controller
     public function update(AccountRequest $request, Account $account)
     {
         if ($account) {
-            $category->update([
+            $account->update([
                 'user_id'      => $request->user_id,
                 'account'      => $request->account,
                 'account_type' => $request->account_type,
-                'q_rcode'      => $request->q_rcode,
+                // 'q_rcode'      => $request->q_rcode,
             ]);
             return $this->customeResponse(new AccountResource($account), 'The Account updated Successfuly', 200);
         }

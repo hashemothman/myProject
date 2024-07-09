@@ -22,10 +22,10 @@ class BusinessAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'company_name' => 'required|string|max:255',
-            'logo' => 'required|string',
+            'company_name'      => 'required|string|max:255',
+            'logo'              => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'commercial_record' => 'required|string',
-            'validity_period' => 'required|date',
+            'validity_period'   => 'required|date',
         ];
     }
 }
