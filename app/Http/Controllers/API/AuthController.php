@@ -103,7 +103,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $token = Auth::refresh();
 
-        $data = new UserResource($user);
-        return $this->apiResponse($data, $token, 'Done!', 200);
+        $data =['user'=>new UserResource($user),'token'=>$token]; ;
+        return $this->apiResponse($data,  'Done!', 200);
     }
 }

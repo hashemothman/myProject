@@ -12,7 +12,7 @@ trait ApiResponseTrait
             'data' =>$data,
             'message' =>$message,
             // 'access_token' => $token,
-            'token_type' => 'Bearer',
+            // 'token_type' => 'Bearer',
         ];
 
         return response()->json($array,$status);
