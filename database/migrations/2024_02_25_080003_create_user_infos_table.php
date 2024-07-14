@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('fullName');
             $table->bigInteger('idNumber');
             $table->string('photo')->nullable();
-            $table->string('front_card_image');
-            $table->string('back_card_image');
+            $table->string('front_card_image')->nullable();
+            $table->string('back_card_image')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
