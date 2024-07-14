@@ -18,7 +18,7 @@ class Transaction extends Model
         'sender',
         'reciever_account',
         'amount',
-        // TODO: type of operation 
+        // TODO: type of operation
         // 'type',
         'date',
     ];
