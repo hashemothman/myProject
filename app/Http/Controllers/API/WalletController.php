@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Wallet\StoreWalletRequest;
-use App\Http\Requests\Wallet\UpdateWalletRequest;
-use App\Http\Resources\WalletResource;
-use App\Http\Traits\ApiResponseTrait;
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Traits\ApiResponseTrait;
+use App\Http\Resources\WalletResource;
+use App\Http\Requests\Wallet\StoreWalletRequest;
+use App\Http\Requests\Wallet\UpdateWalletRequest;
 
 class WalletController extends Controller
 {
@@ -31,14 +32,18 @@ class WalletController extends Controller
     public function store(StoreWalletRequest $request)
     {
         try {
+            DB::beginTransaction();
+            $max_amount_id = $this->getMaxAmount($request->coin_id);
             $wallet = Wallet::create([
                 'amount'        => $request->amount,
                 'coin_id'       => $request->coin_id,
-                'max_amount_id' => $request->max_amount_id
+                'max_amount_id' => $max_amount_id
             ]);
             $data = new WalletResource($wallet);
+            DB::commit();
             return $this->customeResponse($data, 'Created Successfully', 201);
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::debug($th);
             return $this->customeResponse(null, 'Failed To Create', 400);
         }

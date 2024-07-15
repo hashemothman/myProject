@@ -17,6 +17,7 @@ class UserInfoResource extends JsonResource
     {
         $user = $this->user;
         $city = $this->city;
+        $account = $this->user->account;
         return [
             'user'             => new UserResource($user),
             'city'             => new CityResource($city),
@@ -25,6 +26,7 @@ class UserInfoResource extends JsonResource
             'photo'            => asset('photos/' . $this->photo) ,
             'front_card_image' => asset('photos/' . $this->front_card_image) ,
             'back_card_image'  => asset('photos/' . $this->back_card_image) ,
+            'user_account'     => new AccountResource($account),
         ];
     }
 }
