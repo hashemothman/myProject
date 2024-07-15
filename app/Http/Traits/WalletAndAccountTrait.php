@@ -2,20 +2,25 @@
 
 namespace App\Http\Traits;
 
-use App\Models\Account;
-use App\Models\AdminWallet;
 use App\Models\Wallet;
+use App\Models\Account;
+use App\Models\MaxAmount;
+use App\Models\AdminWallet;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\ApiResponseTrait;
 
 trait WalletAndAccountTrait
 {
-    public function createDolarWallet($wallet_request){
+    use ApiResponseTrait;
+    public function createDolarWallet(){
         try {
+            $max_amount_id = $this->getMaxAmount();
             $wallet = new wallet();
-            $wallet->amount        = $wallet_request->amount;
-            $wallet->max_amount_id = $wallet_request->max_amount_id;
+            $wallet->amount        = 0;
+            $wallet->max_amount_id = $max_amount_id;
             $wallet->coin_id = 1; //Dolar
             $wallet->save();
             return $wallet;
@@ -49,13 +54,12 @@ trait WalletAndAccountTrait
         }
     }
 
-    public function createAccount($user_id, $account_request)
+    public function createAccount($account_request)
     {
         DB::beginTransaction();
         try {
             $accountCode = $this->generateAccount();
             $account = Account::create([
-                'user_id'      => $user_id,
                 'account'      => $accountCode,
                 'account_type' => $account_request->account_type,
             ]);
@@ -63,7 +67,9 @@ trait WalletAndAccountTrait
             return $account;
         } catch (\Exception $e) {
             DB::rollback();
-            throw $e;
+            Log::error($e);
+            // throw $e;
+            return $this->customeResponse(null, 'there is something error in the server', 500);
         }
     }
 
@@ -74,4 +80,29 @@ trait WalletAndAccountTrait
         return $accountCode;
     }
 
+
+
+    protected function getMaxAmount($coin_id = 1) {
+        try {
+            $user = optional(Auth::user())->load(['userInfo', 'account']);
+    
+            if (!$user || !$user->hasLoadedRelation('userInfo') || !$user->hasLoadedRelation('account')) {
+                return null;
+            }
+    
+            $userInfo = $user->userInfo;
+            $userAccountType = $user->account->account_type;
+            $country_id = $userInfo->country->id ?? null;
+            $coin_id = $coin_id;
+
+            $maxAmountRecord = MaxAmount::where('coin_id', $coin_id)
+                                        ->where('country_id', $country_id)
+                                        ->where('account_type', $userAccountType)
+                                        ->first();
+            return $maxAmountRecord ? $maxAmountRecord->id : null;
+        } catch (\Exception $e) {
+            Log::error("Error getting max amount: ", ['error' => $e->getMessage()]);
+            return $this->customeResponse(null, 'there is something error in the server', 500);
+        }
+    }
 }

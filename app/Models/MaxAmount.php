@@ -13,7 +13,6 @@ class MaxAmount extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id',
         'coin_id',
         'country_id',
         'account_type',
@@ -29,10 +28,6 @@ class MaxAmount extends Model
         });
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 
     public function coin(): BelongsTo
     {

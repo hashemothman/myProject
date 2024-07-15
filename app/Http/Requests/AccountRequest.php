@@ -25,7 +25,7 @@ class AccountRequest extends FormRequest
         return [
             'account_type' => [
                 'required',
-                Rule::in(['marketer', 'normal']),
+                Rule::in(['marketer', 'normal','agent']),
             ],
         ];
     }

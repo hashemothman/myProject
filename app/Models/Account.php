@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Models\Report;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Account extends Model
 {
@@ -18,7 +20,6 @@ class Account extends Model
         'user_id',
         'account',
         'account_type',
-        // 'q_rcode',
     ];
 
 
@@ -43,4 +44,17 @@ class Account extends Model
         return $this->hasOne(MarketerAccountInfo::class, 'account_id', 'id');
     }
 
+    /**
+     *  put the account user id value equal to the Auth user id
+     *
+     * @return true
+     */
+    protected static function boot(){
+        parent::boot();
+
+        static::creating(function ($account){
+            $account->user_id = Auth::user()->id;
+            return true;
+        });
+    }
 }
