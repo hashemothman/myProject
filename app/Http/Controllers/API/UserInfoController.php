@@ -38,10 +38,12 @@ class UserInfoController extends Controller
             $photo_path = $this->FileExists($request, $request->photo, 'photo', 'userInfos', 'BasImage');
             $front_card_image_path = $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage');
             $back_card_image_path = $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage');
-            
+
             $cityId = $this->getCityId($request->cityName);
+            $countryId = $this->getCountryId($request->countryName);
             $user_info = UserInfo::create([
                 'city_id' => $cityId,
+                'country_id' => $countryId,
                 'fullName' => $request->fullName,
                 'idNumber' => $request->idNumber,
                 'photo' => $photo_path,
@@ -55,9 +57,6 @@ class UserInfoController extends Controller
             Log::error($e);
             return $this->customeResponse(null, 'there is something error in the server', 500);
         }
-        
-
-            return $this->customeResponse(null, 'Failed To Create', 400);
     }
     /**
      * Display the specified resource.

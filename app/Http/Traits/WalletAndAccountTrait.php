@@ -56,26 +56,28 @@ trait WalletAndAccountTrait
 
     public function createAccount($account_request)
     {
-        DB::beginTransaction();
-        try {
+            DB::beginTransaction();
+        // try {
             $accountCode = $this->generateAccount();
+            // dd($account_request);
             $account = Account::create([
                 'account'      => $accountCode,
                 'account_type' => $account_request->account_type,
             ]);
+            // dd($account);
             DB::commit();
             return $account;
-        } catch (\Exception $e) {
-            DB::rollback();
-            Log::error($e);
-            // throw $e;
-            return $this->customeResponse(null, 'there is something error in the server', 500);
-        }
+        // } catch (\Exception $e) {
+        //     // DB::rollback();
+        //     Log::error($e);
+        //     // throw $e;
+        //     return $this->customeResponse(null, 'there is something error in the server', 500);
+        // }
     }
 
     protected function generateAccount()
     {
-        $randomNumber = mt_rand(10000000000000000000, 99999999999999999999);
+        $randomNumber = mt_rand(intval(10000000000000000000), intval(99999999999999999999));
         $accountCode = 'FB-' . $randomNumber;
         return $accountCode;
     }

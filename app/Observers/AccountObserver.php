@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Account;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\WalletAndAccountTrait;
 
 class AccountObserver
@@ -13,7 +14,10 @@ class AccountObserver
      */
     public function created(Account $account): void
     {
-        $wallet = $this->createDolarWallet();
+        $user = $account->user;
+        if ($user->hasRole('user')) {
+            $wallet = $this->createDolarWallet();
+        }
     }
 
     /**

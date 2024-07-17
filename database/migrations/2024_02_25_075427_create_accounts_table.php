@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('account');
-            $table->enum('account_type', ['marketer, normal','agent']);
+            $table->enum('account_type', ['marketer','normal','agent']);
             $table->softDeletes();
             $table->timestamps();
         });
