@@ -58,11 +58,11 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $user->assignRole('user');
         $token = Auth::login($user);
         $data = ['user' => new UserResource($user), 'token' => $token];
         return $this->customeResponse($data, 'User Register successfully', 201);
     }
-
 
     public function registerPhone(UserPhoneRegisterRequest $request)
     {
@@ -70,6 +70,7 @@ class AuthController extends Controller
             'mobile_number' => $request->mobile_number,
             'password' => Hash::make($request->password),
         ]);
+        $user->assignRole('user');
         $token = Auth::login($user);
         $data = ['user' => new UserResource($user), 'token' => $token];
         return $this->customeResponse($data, 'User Register successfully', 201);
@@ -85,7 +86,7 @@ class AuthController extends Controller
         ]);
     }
 
-    
+
     public function refresh()
     {
         $user = Auth::user();
