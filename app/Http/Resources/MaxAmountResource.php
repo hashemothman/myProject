@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\CoinResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MaxAmountResource extends JsonResource
@@ -14,11 +15,9 @@ class MaxAmountResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $user = new UserResource($this->user);
         return [
             'id'           => $this->id,
-            'user'         => $user,
-            'coint'        => $this->coin,
+            'coin'        => $this->coin->coin_name,
             'country'      => $this->country->name,
             'max_amount'   => $this->max_amount,
             'account_type' => $this->account_type

@@ -26,7 +26,10 @@ class StoreMaxAmountRequest extends FormRequest
             'max_amount'    => 'required|numeric',
             'coin_id'       => 'required|integer|exists:coins,id',
             'country_id'    => 'required|integer|exists:countries,id',
-            'account_type'  => ['required', Rule::in(['user', 'agent'])],
+            'account_type' => [
+                'required',
+                Rule::in(['marketer','normal','agent']),
+            ],
         ];
     }
 }

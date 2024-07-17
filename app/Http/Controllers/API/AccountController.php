@@ -36,7 +36,6 @@ class AccountController extends Controller
     public function store(AccountRequest $request)
     {
         $account = $this->createAccount($request);
-        // dd($account);
         return $this->customeResponse(new AccountResource($account), 'Done', 200);
     }
 

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Coin;
+use App\Models\Country;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MaxAmount extends Model
 {
@@ -18,16 +20,6 @@ class MaxAmount extends Model
         'account_type',
         'max_amount',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::creating(function ($max_amount) {
-            $max_amount->user_id = Auth::user()->id;
-        });
-    }
-
 
     public function coin(): BelongsTo
     {

@@ -12,23 +12,23 @@ use App\Http\Traits\ApiResponseTrait;
 
 trait GetCityId
 {
-    use ApiResponseTrait;
-    public function getCityId($city){
-        try {
-            $cityId = City::where('name', 'like', '%' . $city . '%')->first();
-            return $cityId;
-        } catch (Exception $e) {
-            Log::error($e);
-            return $this->customeResponse(null, 'City not found', 404);
+    use ApiResponseTrait;  public function getCityId($city)
+    {
+        $cityResult = City::where('city', 'like', '%' . $city . '%')->first();
+        if ($cityResult) {
+            return ['success' => true, 'id' => $cityResult->id];
+        } else {
+            return ['success' => false, 'message' => 'the service is not available in your city yet we will notify you when the service is available'];
         }
     }
-    public function getCountryId($country){
-        try {
-            $countryId = Country::where('name', 'like', '%' . $country . '%')->first();
-            return $countryId;
-        } catch (Exception $e) {
-            Log::error($e);
-            return $this->customeResponse(null, 'City not found', 404);
+
+    public function getCountryId($country)
+    {
+        $countryResult = Country::where('name', 'like', '%' . $country . '%')->first();
+        if ($countryResult) {
+            return ['success' => true, 'id' => $countryResult->id];
+        } else {
+            return ['success' => false, 'message' => 'the service is not available in your country yet we will notify you when the service is available'];
         }
     }
 }

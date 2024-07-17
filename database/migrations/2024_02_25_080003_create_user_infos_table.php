@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->string('fullName');
-            $table->bigInteger('idNumber');
+            $table->bigInteger('idNumber')->nullable();
             $table->string('photo')->nullable();
             $table->string('front_card_image')->nullable();
             $table->string('back_card_image')->nullable();
