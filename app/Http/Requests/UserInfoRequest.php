@@ -22,7 +22,7 @@ class UserInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'city_id'          => 'required|integer|exists:cities,id',
+            'cityName'          => 'required|string|min:3',
             'fullName'         => 'required|string',
             'idNumber'         => 'required|numeric',
             'photo'            => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',

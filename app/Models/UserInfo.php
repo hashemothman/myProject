@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\City;
+use App\Models\User;
+use App\Models\Country;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +19,7 @@ class UserInfo extends Model
     protected $fillable = [
         'user_id',
         'city_id',
+        'country_id',
         'fullName',
         'idNumber',
         'photo',
@@ -54,5 +58,9 @@ class UserInfo extends Model
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'city_id');
+    }
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
 }

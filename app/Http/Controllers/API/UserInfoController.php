@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Models\UserInfo;
 use App\Http\Traits\FileTrait;
+use App\Http\Traits\GetCityId;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\UserInfoRequest;
@@ -12,7 +16,7 @@ use App\Http\Requests\UpdateUserInfoRequest;
 
 class UserInfoController extends Controller
 {
-    use ApiResponseTrait, FileTrait;
+    use ApiResponseTrait, FileTrait,GetCityId;
 
     /**
      * Display a listing of the resource.
@@ -29,23 +33,29 @@ class UserInfoController extends Controller
      */
     public function store(UserInfoRequest $request)
     {
-        $photo_path            = $this->FileExists($request,$request->photo,'photo', 'userInfos', 'BasImage');
-        $front_card_image_path = $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage');
-        $back_card_image_path  = $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage');
+        try {
+            DB::beginTransaction();
+            $photo_path = $this->FileExists($request, $request->photo, 'photo', 'userInfos', 'BasImage');
+            $front_card_image_path = $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage');
+            $back_card_image_path = $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage');
 
-        $user_info = UserInfo::create([
-            'city_id'          => $request->city_id,
-            'fullName'         => $request->fullName,
-            'idNumber'         => $request->idNumber,
-            'photo'            => $photo_path,
-            'front_card_image' => $front_card_image_path,
-            'back_card_image'  => $back_card_image_path
-        ]);
-
-        if ($user_info) {
+            $cityId = $this->getCityId($request->cityName);
+            $countryId = $this->getCountryId($request->countryName);
+            $user_info = UserInfo::create([
+                'city_id' => $cityId,
+                'country_id' => $countryId,
+                'fullName' => $request->fullName,
+                'idNumber' => $request->idNumber,
+                'photo' => $photo_path,
+                'front_card_image' => $front_card_image_path,
+                'back_card_image' => $back_card_image_path
+            ]);
+            DB::commit();
             return $this->customeResponse(new UserinfoResource($user_info), 'Created Successfully', 201);
-
-            return $this->customeResponse(null, 'Failed To Create', 400);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return $this->customeResponse(null, 'there is something error in the server', 500);
         }
     }
     /**

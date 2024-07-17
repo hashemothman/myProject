@@ -16,11 +16,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
+            $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
             $table->string('fullName');
             $table->bigInteger('idNumber');
             $table->string('photo')->nullable();
-            $table->string('front_card_image');
-            $table->string('back_card_image');
+            $table->string('front_card_image')->nullable();
+            $table->string('back_card_image')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

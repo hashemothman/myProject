@@ -10,15 +10,17 @@ use Endroid\QrCode\Builder\Builder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\Response\QrCodeResponse;
 use App\Http\Resources\AccountResource;
 use BaconQrCode\Renderer\ImageRenderer;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Traits\WalletAndAccountTrait;
+use Endroid\QrCode\Response\QrCodeResponse;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 
 class AccountController extends Controller
 {
+    use WalletAndAccountTrait;
     /**
      * Display a listing of the resource.
      */
@@ -33,12 +35,9 @@ class AccountController extends Controller
      */
     public function store(AccountRequest $request)
     {
-        // $validatedData = $request->validated();
-        // // // Generate QR code
-        // // $qrCodePath = $this->generateQRCode($validatedData['account']);
-        // // // Store account including QR code path
-        // // $account = Account::create(array_merge($validatedData, ['q_rcode' => $qrCodePath]));
-        // return $this->customeResponse(new AccountResource($account), 'New Account Created Successfully', 200);
+        $account = $this->createAccount($request);
+        // dd($account);
+        return $this->customeResponse(new AccountResource($account), 'Done', 200);
     }
 
     /**

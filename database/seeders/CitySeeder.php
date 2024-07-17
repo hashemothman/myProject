@@ -13,11 +13,38 @@ class CitySeeder extends Seeder
      */
     public function run(): void
     {
-        $city1 = City::create([
+        City::create([
             'city' => "homs"
         ]);
-        $city2 = City::create([
+        City::create([
             'city' => "hama"
+        ]);
+        City::create([
+            'city' => "Idlib "
+        ]);
+        City::create([
+            'city' => "Deir al-Zour"
+        ]);
+        City::create([
+            'city' => "Al-Hasakah"
+        ]);
+        City::create([
+            'city' => "Daraa"
+        ]);
+        City::create([
+            'city' => "Ar-Raqqah"
+        ]);
+        City::create([
+            'city' => "Damascus"
+        ]);
+        City::create([
+            'city' => "Latakia"
+        ]);
+        City::create([
+            'city' => "Tartus"
+        ]);
+        City::create([
+            'city' => "Qamishli"
         ]);
     }
 }
