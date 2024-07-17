@@ -48,7 +48,7 @@ class AuthController extends Controller
         }
         $user = Auth::user();
         $data = ['user' => new UserResource($user), 'token' => $token];
-        return $this->apiResponse($data, 'User Login successfully', 200);
+        return $this->customeResponse($data, 'User Login successfully', 200);
     }
 
 
@@ -92,6 +92,6 @@ class AuthController extends Controller
         $user = Auth::user();
         $token = Auth::refresh();
         $data = ['user' => new UserResource($user), 'token' => $token];
-        return $this->apiResponse($data, 'Done!', 200);
+        return $this->customeResponse($data, 'Done!', 200);
     }
 }
