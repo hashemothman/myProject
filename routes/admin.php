@@ -18,7 +18,11 @@ Route::middleware('admin')->group(function () {
 
     Route::post('/login', [AdminController::class, 'login']);
 
-    Route::middleware('CheckAdminToken:admin-api')->group(function () {
+    Route::middleware(['CheckAdminToken:admin-api', ])->group(function () {
+
+        // create Admin
+        Route::post('create-admin', [AdminController::class, 'create_admin']);
+
         // Role
         Route::get('/roles', [RoleController::class, 'index']);
         Route::post('/add-role', [RoleController::class, 'store']);
@@ -53,7 +57,7 @@ Route::middleware('admin')->group(function () {
         Route::delete('/delete-complain/{complain}', [ComplainController::class, 'destroy']);
 
 
-        
+
         ###########################################################################################################
         ########################################## Employee CONTROLLER ############################################
         ###########################################################################################################

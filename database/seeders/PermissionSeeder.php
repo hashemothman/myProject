@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Traits\GenerateAccount;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Database\Seeder;
@@ -13,6 +14,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionSeeder extends Seeder
 {
+    use GenerateAccount;
     private $permissions = [
         'role-list',
         'role-create',
@@ -38,7 +40,7 @@ class PermissionSeeder extends Seeder
         'wallet-create',
         'wallet-edit',
         'wallet-delete',
-        
+
         'percent-list',
         'percent-create',
         'percent-edit',
@@ -66,9 +68,10 @@ class PermissionSeeder extends Seeder
 
             // Create admin User and assign the role to him.
             $admin = Admin::create([
-                'email' => 'admin@gmail.com',
-                'password' => Hash::make('password'),
-                'role_name' => 'Manager',
+                'email'          => 'admin@gmail.com',
+                'password'       => 'password',
+                'role_name'      => 'Manager',
+                'account_number' => $this->generateAdminAccountNumber()
             ]);
 
             $role = Role::create(['name' => 'Manager', 'guard_name' => 'admin-api']);

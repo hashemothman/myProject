@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('role_name');
+            $table->text('account_number')->unique();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -40,27 +40,27 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             AssignPermissionsSeeder::class,
-            AdminsSeeder::class,
             CoinSeeder::class,
+            AdminsSeeder::class,
             CitySeeder::class,
             CountrySeeder::class,
         ]);
 
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
 
-            \App\Models\Admin::create([
-                'email' => 'yousef@gmail.com',
-                'password' => Hash::make('12345678'),
-                'role_name' => 'sssss',
-            ]);
-            $this->createDolarAdminWallet();
-            $this->createSPAdminWallet();
-            DB::commit();
-        } catch (\Throwable $th) {
-            //throw $th;
-            DB::rollBack();
-        }
+        //     \App\Models\Admin::create([
+        //         'email' => 'yousef@gmail.com',
+        //         'password' => Hash::make('12345678'),
+        //         'role_name' => 'sssss',
+        //     ]);
+        //     $this->createDolarAdminWallet();
+        //     $this->createSPAdminWallet();
+        //     DB::commit();
+        // } catch (\Throwable $th) {
+        //     //throw $th;
+        //     DB::rollBack();
+        // }
 
 
     }

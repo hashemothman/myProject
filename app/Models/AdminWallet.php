@@ -17,15 +17,6 @@ class AdminWallet extends Model
         'amount',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        self::creating(function ($adminWallet) {
-            $adminWallet->admin_id = Auth::guard('admin-api')->user()->id;
-        });
-    }
-
     public function admin(): BelongsTo
     {
         return $this->belongsTo(Admin::class, 'admin_id');
