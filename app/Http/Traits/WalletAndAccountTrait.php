@@ -15,7 +15,8 @@ use App\Http\Traits\ApiResponseTrait;
 trait WalletAndAccountTrait
 {
     use ApiResponseTrait;
-    public function createDolarWallet(){
+    public function createDolarWallet()
+    {
         try {
             DB::beginTransaction();
             $max_amount_id = $this->getMaxAmount();
@@ -31,23 +32,14 @@ trait WalletAndAccountTrait
             throw $th;
         }
     }
-    public function createDolarAdminWallet(){
+
+    public function createAdminWallet($admin_id, $coin_id)
+    {
         try {
             $wallet = new AdminWallet();
-            $wallet->amount        = 0;
-            $wallet->coin_id = 1; //Dolar
-            $wallet->save();
-            return $wallet;
-        } catch (\Throwable $th) {
-            Log::error($th);
-            throw $th;
-        }
-    }
-    public function createSPAdminWallet(){
-        try {
-            $wallet = new AdminWallet();
-            $wallet->amount        = 0;
-            $wallet->coin_id = 2; //SP
+            $wallet->admin_id = $admin_id;
+            $wallet->amount   = 0;
+            $wallet->coin_id  = $coin_id;
             $wallet->save();
             return $wallet;
         } catch (\Throwable $th) {
@@ -58,6 +50,7 @@ trait WalletAndAccountTrait
 
     public function createAccount($account_request)
     {
+
             DB::beginTransaction();
         try {
             $accountCode = $this->generateAccount();
@@ -84,23 +77,24 @@ trait WalletAndAccountTrait
 
 
 
-    protected function getMaxAmount($coin_id = 1) {
+    protected function getMaxAmount($coin_id = 1)
+    {
         try {
             $user = optional(Auth::user())->load(['userInfo', 'account']);
-    
+ 
             if (!$user) {
                 return null;
             }
-    
+
             $userInfo = $user->userInfo;
             $userAccountType = $user->account->account_type;
             $country_id = $userInfo->country->id;
             $coin_id = $coin_id;
 
             $maxAmountRecord = MaxAmount::where('coin_id', $coin_id)
-                                        ->where('country_id', $country_id)
-                                        ->where('account_type', $userAccountType)
-                                        ->first();
+                ->where('country_id', $country_id)
+                ->where('account_type', $userAccountType)
+                ->first();
             return $maxAmountRecord ? $maxAmountRecord->id : null;
         } catch (\Exception $e) {
             Log::error("Error getting max amount: ", ['error' => $e->getMessage()]);
