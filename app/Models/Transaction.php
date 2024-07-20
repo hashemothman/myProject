@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Observers\TransactionObserver;
 use Illuminate\Database\Eloquent\Model;
@@ -19,10 +20,17 @@ class Transaction extends Model
         'reciever_account',
         'amount',
         // TODO: type of operation
-        // 'type',
+        'type',
         'date',
+        'transactionable_id',
+        'transactionable_type'
     ];
 
+     // Define the polymorphic relationship
+    public function transactionable()
+    {
+        return $this->morphTo();
+    }
     public function coin(): BelongsTo
     {
         return $this->belongsTo(Coin::class, 'coin_id');
@@ -32,11 +40,17 @@ class Transaction extends Model
     {
         parent::boot();
         static::creating(function ($transaction) {
-            $transaction->sender = Auth::user()->id;
+            $isUserAdmin = Auth::guard('admin-api')->check();
+            if ($isUserAdmin) {
+                $admin =  Auth::guard('admin-api')->user();
+                $transaction->sender = $admin->id;
+            } else {
+                $transaction->sender = Auth::user()->id;
+            }
+            $transaction->date = Carbon::now()->format('Y-m-d H:i:s');
             return true;
         });
         self::observe(TransactionObserver::class);
-
     }
 
 

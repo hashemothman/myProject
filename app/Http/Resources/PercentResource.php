@@ -16,9 +16,9 @@ class PercentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $coin = Coin::where('id',$this->coin_id)->get();
         return [
-            'coin_id'        => new CoinResource($coin),
+            'id'             => $this->id,
+            'coin_id'        => new CoinResource($this->coin),
             'value'          => $this->value,
             'operation_type' => $this->operation_type,
         ];

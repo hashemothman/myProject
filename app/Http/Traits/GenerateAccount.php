@@ -24,7 +24,7 @@ trait GenerateAccount
             }
 
             // Ensure the new number is unique
-            while (Admin::where('account_number', 'FB-A-' . str_pad($newNumber, 16, '0', STR_PAD_LEFT))->exists()) {
+            while (Admin::where('account_number', 'BF-A-' . str_pad($newNumber, 16, '0', STR_PAD_LEFT))->exists()) {
                 $newNumber = bcadd($newNumber, '1');
                 if (bccomp($newNumber, $maxValue) === 1) {
                     $maxValue = bcadd($maxValue, '1'); // Reset if max value is reached
@@ -36,7 +36,7 @@ trait GenerateAccount
         }, 5); // Retry up to 5 times in case of deadlock
 
         // Format the account number
-        $formattedAccountNumber = 'FB-A-' . str_pad($accountNumber, 16, '0', STR_PAD_LEFT); // Ensures the number part has at least 16 digits
+        $formattedAccountNumber = 'BF-A-' . str_pad($accountNumber, 16, '0', STR_PAD_LEFT); // Ensures the number part has at least 16 digits
 
         return $formattedAccountNumber;
     }

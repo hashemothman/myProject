@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Transaction;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -31,6 +32,16 @@ class Admin extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'password' => 'hashed',
+    ];
+
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -55,6 +66,11 @@ class Admin extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Employee::class, 'admin_id', 'id');
     }
+
+    public function transactions()
+{
+    return $this->morphMany(Transaction::class, 'transactionable');
+}
 
 
 }

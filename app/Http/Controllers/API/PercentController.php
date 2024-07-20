@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Traits\ApiResponseTrait;
 use App\Models\Percent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,7 @@ use App\Http\Requests\UpdatePercentRequest;
 
 class PercentController extends Controller
 {
+    use ApiResponseTrait;
     /**
      * Display a listing of the resource.
      */
@@ -76,7 +78,7 @@ class PercentController extends Controller
     {
         try {
             $percent->delete();
-            return $this->customeResponse("","UserLog deleted successfully",200);
+            return $this->customeResponse("","Percent deleted successfully",200);
         } catch (\Throwable $th) {
             Log::error($th);
             return $this->customeResponse(null,"Error, There somthing Rong here",500);

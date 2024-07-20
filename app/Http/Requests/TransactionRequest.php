@@ -23,9 +23,8 @@ class TransactionRequest extends FormRequest
     {
         return [
             'coin_id'        => 'required|integer|exists:coins,id',
-            'reciever_uuid'  => 'required|integer',
+            'reciever_account'  => 'required|string',
             'amount'         => 'required|string',
-            'date'           => 'required|date',
         ];
     }
 }

@@ -25,7 +25,7 @@ class UserInfoRequest extends FormRequest
             'cityName'         => 'required|string|min:3',
             'countryName'      => 'required|string|min:3',
             'fullName'         => 'required|string',
-            'idNumber'         => 'required|numeric',
+            'idNumber'         => 'nullable|numeric',
             'photo'            => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'front_card_image' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'back_card_image'  => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',

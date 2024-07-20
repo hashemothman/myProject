@@ -24,8 +24,14 @@ class PercentRequest extends FormRequest
     {
         return [
             'coin_id'       =>'required|integer|exists:coins,id',
-            'value'         =>'required|percent',
-            'operation_type'=>[
+            'value'         => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (!is_numeric($value) || $value < 0 || $value > 100) {
+                        $fail($attribute.' must be a valid percentage.');
+                    }
+                },
+            ],            'operation_type'=>[
                 'required',
                 Rule::in(['internal', 'external']),
             ],

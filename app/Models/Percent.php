@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Coin;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Percent extends Model
 {
@@ -15,4 +16,9 @@ class Percent extends Model
         'coin_id',
         'value',
     ];
+
+    public function coin()
+    {
+        return $this->belongsTo(Coin::class, 'coin_id');
+    }
 }

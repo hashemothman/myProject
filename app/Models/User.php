@@ -9,6 +9,7 @@ use App\Models\UserLog;
 use App\Models\Complain;
 use App\Models\UserInfo;
 use App\Models\MaxAmount;
+use App\Models\Transaction;
 use App\Models\BussinessAccount;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Models\Role;
@@ -123,4 +124,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserLog::class, 'user_id');
     }
+
+    public function transactions()
+{
+    return $this->morphMany(Transaction::class, 'transactionable');
+}
 }
