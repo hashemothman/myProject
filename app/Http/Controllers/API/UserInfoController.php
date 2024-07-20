@@ -35,12 +35,23 @@ class UserInfoController extends Controller
     {
         try {
             DB::beginTransaction();
-            $photo_path = $this->FileExists($request, $request->photo, 'photo', 'userInfos', 'BasImage');
-            $front_card_image_path = $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage');
-            $back_card_image_path = $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage');
+            $photo_path = $request->hasFile('photo') ? $this->FileExists($request, $request->photo, 'photo', 'userInfos', 'BasImage') : null;
+            $front_card_image_path =  $request->hasFile('front_card_image') ? $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage') : null;
+            $back_card_image_path = $request->hasFile('back_card_image') ? $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage') : null;
 
-            $cityId = $this->getCityId($request->cityName);
-            $countryId = $this->getCountryId($request->countryName);
+            $cityResult = $this->getCityId($request->cityName);
+            $countryResult = $this->getCountryId($request->countryName);
+    
+            if (!$cityResult['success']) {
+                return $this->customeResponse(null, $cityResult['message'], 404);
+            }
+    
+            if (!$countryResult['success']) {
+                return $this->customeResponse(null, $countryResult['message'], 404);
+            }
+    
+            $cityId = $cityResult['id'];
+            $countryId = $countryResult['id'];
             $user_info = UserInfo::create([
                 'city_id' => $cityId,
                 'country_id' => $countryId,

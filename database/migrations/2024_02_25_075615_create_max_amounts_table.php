@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('coin_id')->constrained('coins')->cascadeOnDelete();
             $table->foreignId('country_id')->constrained('countries')->cascadeOnDelete();
-            $table->enum('account_type', ['marketer','user', 'agent']);
+            $table->enum('account_type', ['marketer','normal','agent']);
             $table->integer('max_amount');
             $table->softDeletes();
             $table->timestamps();

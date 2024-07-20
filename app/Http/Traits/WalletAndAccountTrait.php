@@ -18,12 +18,14 @@ trait WalletAndAccountTrait
     public function createDolarWallet()
     {
         try {
+            DB::beginTransaction();
             $max_amount_id = $this->getMaxAmount();
-            $wallet = new wallet();
-            $wallet->amount        = 0;
-            $wallet->max_amount_id = $max_amount_id;
-            $wallet->coin_id = 1; //Dolar
-            $wallet->save();
+            $wallet = Wallet::create([
+                'amount'        => 0,
+                'coin_id'       => 1,
+                'max_amount_id' => $max_amount_id,
+            ]);
+            DB::commit();
             return $wallet;
         } catch (\Throwable $th) {
             Log::error($th);
@@ -48,23 +50,22 @@ trait WalletAndAccountTrait
 
     public function createAccount($account_request)
     {
-        DB::beginTransaction();
-        // try {
-        $accountCode = $this->generateAccount();
-        // dd($account_request);
-        $account = Account::create([
-            'account'      => $accountCode,
-            'account_type' => $account_request->account_type,
-        ]);
-        // dd($account);
-        DB::commit();
-        return $account;
-        // } catch (\Exception $e) {
-        //     // DB::rollback();
-        //     Log::error($e);
-        //     // throw $e;
-        //     return $this->customeResponse(null, 'there is something error in the server', 500);
-        // }
+
+            DB::beginTransaction();
+        try {
+            $accountCode = $this->generateAccount();
+            $account = Account::create([
+                'account'      => $accountCode,
+                'account_type' => $account_request->account_type,
+            ]);
+            DB::commit();
+            return $account;
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e);
+            // throw $e;
+            return $this->customeResponse(null, 'there is something error in the server', 500);
+        }
     }
 
     protected function generateAccount()
@@ -80,14 +81,14 @@ trait WalletAndAccountTrait
     {
         try {
             $user = optional(Auth::user())->load(['userInfo', 'account']);
-
-            if (!$user || !$user->hasLoadedRelation('userInfo') || !$user->hasLoadedRelation('account')) {
+ 
+            if (!$user) {
                 return null;
             }
 
             $userInfo = $user->userInfo;
             $userAccountType = $user->account->account_type;
-            $country_id = $userInfo->country->id ?? null;
+            $country_id = $userInfo->country->id;
             $coin_id = $coin_id;
 
             $maxAmountRecord = MaxAmount::where('coin_id', $coin_id)

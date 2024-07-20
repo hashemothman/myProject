@@ -68,6 +68,8 @@ class MaxAmountController extends Controller
         try {
             $max_amount->max_amount = $request->input('max_amount') ?? $max_amount->max_amount;
             $max_amount->country_id = $request->input('country_id') ?? $max_amount->country_id;
+            $max_amount->coin_id = $request->input('coin_id') ?? $max_amount->coin_id;
+            $max_amount->account_type = $request->input('account_type') ?? $max_amount->account_type;
             $max_amount->save();
 
             $data = new MaxAmountResource($max_amount);
