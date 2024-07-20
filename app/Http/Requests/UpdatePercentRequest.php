@@ -24,7 +24,14 @@ class UpdatePercentRequest extends FormRequest
     {
         return [
             'coin_id'       =>'nullable|integer|exists:coins,id',
-            'value'         =>'nullable|percent',
+            'value'         => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    if (!is_numeric($value) || $value < 0 || $value > 100) {
+                        $fail($attribute.' must be a valid percentage.');
+                    }
+                },
+            ],
             'operation_type'=>[
                 'nullable',
                 Rule::in(['internal', 'external']),

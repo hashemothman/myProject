@@ -13,7 +13,7 @@ class TransactionObserver
      */
     public function created(Transaction $transaction): void
     {
-        $this->transferAmount($transaction->sender, $transaction->coin_id , $transaction->reciever_account, $transaction->amount);
+        // $this->transferAmount($transaction->sender, $transaction->coin_id , $transaction->reciever_account, $transaction->amount);
     }
 
     /**

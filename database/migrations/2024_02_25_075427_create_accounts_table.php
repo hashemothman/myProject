@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->string('account');
+            $table->string('account')->unique();
             $table->enum('account_type', ['marketer','normal','agent']);
             $table->softDeletes();
             $table->timestamps();

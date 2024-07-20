@@ -31,7 +31,7 @@ class AdminController extends Controller
 
         $admin = Auth::guard('admin-api')->user();
         $data['admin'] = new AdminResource($admin);
-        return $this->apiResponse($data, 'Admin Login successfully', 200);
+        return $this->customeResponse($data, 'Admin Login successfully', 200);
     }
 
     public function logout(Request $request)
@@ -55,7 +55,7 @@ class AdminController extends Controller
             $data['token'] = Auth::guard('admin-api')->login($admin);
 
             $data['admin'] = new AdminResource($admin);
-            return $this->apiResponse($data, 'Admin Created successfully', 201);
+            return $this->customeResponse($data, 'Admin Created successfully', 201);
 
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

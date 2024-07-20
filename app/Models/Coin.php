@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Percent;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Coin extends Model
 {
@@ -25,6 +26,10 @@ class Coin extends Model
     public function maxAmount(): HasOne
     {
         return $this->hasOne(MaxAmount::class, 'coin_id', 'id');
+    }
+    public function percent(): HasMany
+    {
+        return $this->hasMany(Percent::class, 'coin_id', 'id');
     }
 
     public function transactions(): HasMany

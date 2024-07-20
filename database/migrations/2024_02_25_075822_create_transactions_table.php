@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->morphs('transactionable'); // Adds transactionable_id and transactionable_type columns
             $table->foreignId('coin_id')->constrained('coins')->cascadeOnDelete();
             $table->integer('sender');
             $table->string('reciever_account');
             $table->decimal('amount');
-            // $table->enum('type', ['internal', 'external']);
+            $table->enum('type', ['internal', 'external']);
             $table->date('date');
             $table->softDeletes();
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\AccountResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -21,6 +22,7 @@ class UserResource extends JsonResource
             'status'           => $this->status,
             'type'             => $this->type,
             'role_name'        => $this->role_name,
+
         ];
     }
 }

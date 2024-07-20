@@ -17,12 +17,10 @@ class TransactionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $coin = Coin::where('id',$this->coin_id)->get();
-        $sender = User::where('id',$this->sender)->get();
+
         return [
-            'coin_id'        => new CoinResource($coin),
-            'sender'         => $sender,
-            'reciever_uuid'  => $this->reciever_uuid,
+            'coin_id'        => new CoinResource($this->coin),
+            'reciever_account'  => $this->reciever_account,
             'amount'         => $this->amount,
             'date'           => $this->date,
         ];

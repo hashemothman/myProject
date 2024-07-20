@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('percents', function (Blueprint $table) {
             $table->id();
             $table->enum('operation_type', ['internal', 'external']);
-            $table->string('coin_id');
+            $table->foreignId('coin_id')->constrained('coins')->cascadeOnDelete();
             $table->string('value');
             $table->softDeletes();
             $table->timestamps();
