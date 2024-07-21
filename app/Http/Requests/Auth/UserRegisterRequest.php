@@ -24,6 +24,7 @@ class UserRegisterRequest extends FormRequest
         return [
             'email'         => 'required|string|email|unique:users',
             'password'      => 'required|min:8',
+            'fcm_token'      => 'nullable|min:2|string',
         ];
     }
 }

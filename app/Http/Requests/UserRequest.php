@@ -26,6 +26,7 @@ class UserRequest extends FormRequest
             'email'         => 'required|string|email|unique:users',
             'mobile_number' => 'required|string|unique:users',
             'password'      => 'required|min:8',
+            // 'fcm_token'      => 'required|min:2|string',
         ];
     }
 }

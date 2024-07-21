@@ -22,7 +22,7 @@ class UserResource extends JsonResource
             'status'           => $this->status,
             'type'             => $this->type,
             'role_name'        => $this->role_name,
-
+            'fcm_token'       => $this->fcm_token,
         ];
     }
 }
