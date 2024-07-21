@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\UserLoginRequest;
-use App\Http\Requests\Auth\UserPhoneRegisterRequest;
-use App\Http\Requests\Auth\UserRegisterRequest;
-use App\Http\Resources\UserResource;
-use App\Http\Traits\ApiResponseTrait;
-use App\Http\Traits\WalletAndAccountTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Traits\ApiResponseTrait;
+use App\Http\Traits\SendNotification;
+use App\Http\Traits\WalletAndAccountTrait;
+use App\Http\Requests\Auth\UserLoginRequest;
+use App\Http\Requests\Auth\UserRegisterRequest;
+use App\Http\Requests\Auth\UserPhoneRegisterRequest;
 
 class AuthController extends Controller
 {
-    use ApiResponseTrait, WalletAndAccountTrait;
+    use ApiResponseTrait, WalletAndAccountTrait,SendNotification;
 
     /**
      * Create a new AuthController instance.
@@ -31,24 +34,39 @@ class AuthController extends Controller
 
     public function login(UserLoginRequest $request)
     {
-        if (!empty($request->email)) {
-            $credentials = $request->only('email', 'password');
-        } elseif (!empty($request->mobile_number)) {
-            $credentials = $request->only('mobile_number', 'password');
-        } else {
-            return response()->json([
-                'message' => 'Please Enter Your Email or Mobile Number',
-            ], 404);
+        try {
+            DB::beginTransaction();
+            if (!empty($request->email)) {
+                $credentials = $request->only('email', 'password');
+            } elseif (!empty($request->mobile_number)) {
+                $credentials = $request->only('mobile_number', 'password');
+            } else {
+                return response()->json([
+                    'message' => 'Please Enter Your Email or Mobile Number',
+                ], 404);
+            }
+            $token = Auth::attempt($credentials);
+            if (!$token) {
+                return response()->json([
+                    'message' => 'Unauthorized',
+                ], 401);
+            }
+            $userModel = User::find(Auth::id());
+            $newFcmToken = $request->input('fcm_token');
+            if ($newFcmToken) {
+                $userModel->fcm_token = $newFcmToken;
+            }
+            $userModel->save();
+            $data = ['user' => new UserResource($userModel), 'token' => $token];
+            DB::commit();
+            //test notification
+            // $this->sendNotification('wer','rwer','werwer','werwerew');
+            return $this->customeResponse($data, 'User Login successfully', 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            return $this->customeResponse(null, 'there is something wrong', 500);
         }
-        $token = Auth::attempt($credentials);
-        if (!$token) {
-            return response()->json([
-                'message' => 'Unauthorized',
-            ], 401);
-        }
-        $user = Auth::user();
-        $data = ['user' => new UserResource($user), 'token' => $token];
-        return $this->customeResponse($data, 'User Login successfully', 200);
     }
 
 
@@ -57,6 +75,8 @@ class AuthController extends Controller
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'fcm_token' => $request->fcm_token
+
         ]);
         $user->assignRole('user');
         $token = Auth::login($user);
@@ -69,6 +89,7 @@ class AuthController extends Controller
         $user = User::create([
             'mobile_number' => $request->mobile_number,
             'password' => Hash::make($request->password),
+            'fcm_token' => $request->fcm_token
         ]);
         $user->assignRole('user');
         $token = Auth::login($user);

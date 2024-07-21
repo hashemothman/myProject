@@ -25,6 +25,7 @@ class UserLoginRequest extends FormRequest
             'email'         => 'nullable|string|email',
             'mobile_number' => 'nullable|string',
             'password'      => 'required|min:8',
+            'fcm_token'      => 'nullable|min:2|string',
         ];
     }
 }

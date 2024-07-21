@@ -24,6 +24,7 @@ class UserPhoneRegisterRequest extends FormRequest
         return [
            'mobile_number' => 'nullable|string|unique:users',
             'password'      => 'required|min:8',
+            'fcm_token'      => 'nullable|min:2|string',
         ];
     }
 }

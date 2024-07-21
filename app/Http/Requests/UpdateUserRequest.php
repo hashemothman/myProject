@@ -26,6 +26,7 @@ class UpdateUserRequest extends FormRequest
             'email'         => 'nullable|string|email|unique:users',
             'mobile_number' => 'nullable|string|unique:users',
             'password'      => 'nullable|min:8',
+            'fcm_token'      => 'nullable|min:2|string',
             'status' => ['nullable',
                 Rule::in(['Active', 'DisActive']),
             ],
