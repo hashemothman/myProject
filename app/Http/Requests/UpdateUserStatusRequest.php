@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class UpdateUserStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,16 +23,9 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'         => 'nullable|string|email|unique:users',
-            'mobile_number' => 'nullable|string|unique:users',
-            'password'      => 'nullable|min:8',
-            'fcm_token'      => 'nullable|min:2|string',
             'status' => ['nullable',
-                Rule::in(['Active', 'DisActive','Pending']),
-            ],
-            'type' =>['nullable',
-                Rule::in(['User']),
-            ],
+            Rule::in(['Active', 'DisActive','Pending']),
+        ],
         ];
     }
 }
