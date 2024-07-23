@@ -37,6 +37,7 @@ Route::middleware('admin')->group(function () {
         Route::get('/user/{user}', [UserController::class, 'show']);
         Route::put('/update-user/{user}', [UserController::class, 'update']);
         Route::delete('/delete-user/{user}', [UserController::class, 'destroy']);
+        Route::patch('/update-status/{user}', [UserController::class, 'updateUserStatus']);
         // End User
 
         Route::post('/logout', [AdminController::class, 'logout']);

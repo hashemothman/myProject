@@ -16,6 +16,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Traits\WalletAndAccountTrait;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\UpdateUserStatusRequest;
 use App\Http\Requests\Wallet\StoreWalletRequest;
 
 class UserController extends Controller
@@ -95,5 +96,17 @@ class UserController extends Controller
             return $this->customeResponse("", 'user deleted successfully', 200);
         }
         return $this->customeResponse(null, 'user not found', 404);
+    }
+
+
+    public function updateUserStatus(UpdateUserStatusRequest $request, User $user){
+        try {
+            $user->status = $request->input('status') ?? $user->status;
+            $user->save();
+            return $this->customeResponse(new UserResource($user), 'user status updated successfully', 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return $this->customResponse(null, "Error, something went wrong", 500);
+        }
     }
 }

@@ -37,7 +37,7 @@ class OfficeInfoController extends Controller
 
         if ($officeInfo) {
             return $this->customeResponse(new OfficeInfoResource($officeInfo), 'Created Successfully', 201);
-
+        }else{
             return $this->customeResponse(null, 'Failed To Create', 400);
         }
     }
