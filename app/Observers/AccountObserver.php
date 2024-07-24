@@ -15,8 +15,10 @@ class AccountObserver
     public function created(Account $account): void
     {
         $user = $account->user;
+
+        // dd($user);
         if ($user->hasRole('user')) {
-            $wallet = $this->createDolarWallet();
+            $wallet = $this->createDolarWallet($user);
         }
     }
 

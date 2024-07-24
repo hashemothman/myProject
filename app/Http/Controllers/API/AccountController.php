@@ -45,6 +45,7 @@ class AccountController extends Controller
     public function show(Account $account)
     {
         if ($account) {
+            // dd($account);
             return $this->customeResponse(new AccountResource($account), 'Done', 200);
         }
         return $this->customeResponse(null, 'account not found', 404);
