@@ -16,11 +16,11 @@ use App\Http\Traits\ApiResponseTrait;
 trait WalletAndAccountTrait
 {
     use ApiResponseTrait;
-    public function createDolarWallet()
+    public function createDolarWallet($user)
     {
         try {
             DB::beginTransaction();
-            $max_amount_id = $this->getMaxAmount();
+            $max_amount_id = $this->getMaxAmount($user);
             $wallet = Wallet::create([
                 'amount'        => 0,
                 'coin_id'       => 1,
@@ -103,19 +103,17 @@ trait WalletAndAccountTrait
         return $formattedAccountNumber;
     }
 
-    protected function getMaxAmount($coin_id = 1)
+    protected function getMaxAmount($user,$coin_id = 1)
     {
         try {
-            $user = optional(Auth::user())->load(['userInfo', 'account']);
-            if (!$user) {
-                return null;
-            }
-
+            // $user = optional(Auth::user())->load(['userInfo', 'account']);
+            // if (!$user) {
+            //     return null;
+            // }
             $userInfo = $user->userInfo;
             $userAccountType = $user->account->account_type;
             $country_id = $userInfo->country->id;
             $coin_id = $coin_id;
-            
             $maxAmountRecord = MaxAmount::where('coin_id', $coin_id)
             ->where('country_id', $country_id)
             ->where('account_type', $userAccountType)

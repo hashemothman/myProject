@@ -41,7 +41,6 @@ Route::post('/register-phone', [AuthController::class, 'registerPhone']);
 
 
 
-
 Route::middleware('jwt.verify')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -130,6 +129,9 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
     ############################################################################
 
+
+    #################### show percent ##########################
+    Route::get('/percents', [PercentController::class, 'index']);
 
 
 

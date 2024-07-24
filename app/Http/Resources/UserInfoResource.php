@@ -22,6 +22,7 @@ class UserInfoResource extends JsonResource
         $country = $this->country;
        
         return [
+            'id'               => $this->id,
             'user'             => new UserResource($user),
             'city'             => new CityResource($city),
             'country'          => new CountryResource($country),
