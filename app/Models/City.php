@@ -13,6 +13,7 @@ class City extends Model
 
     protected $fillable = [
         'city',
+        'is_active',
     ];
 
     public function officeInfos(): HasMany

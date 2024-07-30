@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Country;
+use App\Models\City;
 use Illuminate\Http\Request;
-use App\Http\Requests\CountryRequest;
 use App\Http\Traits\ApiResponseTrait;
-use App\Http\Resources\CountryResource;
 
-class CountryController extends Controller
+class CityController extends Controller
 {
     use ApiResponseTrait;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         try {
-            $countries = Country::all();
-            return $this->customeResponse(CountryResource::collection($countries), 'Done', 200);
+            $cities = City::select('city','is_active')->all();
+            return $this->customeResponse($cities, 'Done', 200);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->customeResponse(null, 'there is something ronge', 500);
@@ -28,13 +27,14 @@ class CountryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CountryRequest $request)
+    public function store(Request $request)
     {
         try {
-            $country = Country::create([
-                'name' => $request->name,
+            $city = City::create([
+                'city' => $request->name,
             ]);
-            return $this->customeResponse(new CountryResource($country), 'Country created successfully', 200);
+            $city->select('city','is_active');
+            return $this->customeResponse($city, 'city created successfully', 200);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->customeResponse(null, 'there is something ronge', 500);
@@ -44,10 +44,12 @@ class CountryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Country $country)
+    public function show(City $city)
     {
+        
         try {
-            return $this->customeResponse(new CountryResource($country), 'Done', 200);
+            $city->select('city','is_active');
+            return $this->customeResponse($city, 'success', 200);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->customeResponse(null, 'there is something ronge', 500);
@@ -57,27 +59,27 @@ class CountryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CountryRequest $request,Country $country)
+    public function update(Request $request, City $city)
     {
         try {
-            $country->name = $request->input('name') ?? $country->name;
-            $country->is_active = $request->input('is_active') ?? $country->is_active;
-            $country->save();
-            return $this->customeResponse(new CountryResource($country), 'Country updated successfully', 200);
+            $city->city = $request->input('city') ?? $city->city;
+            $city->is_active = $request->input('is_active') ?? $city->is_active;
+            $city->save();
+            $city->select('city','is_active');
+            return $this->customeResponse($city, 'city updated successfully', 200);
         } catch (\Throwable $th) {
             //throw $th;
             return $this->customeResponse(null, 'there is something ronge', 500);
         }
-        
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Country $country)
+    public function destroy(City $city)
     {
         try {
-            $country->delete();
+            $city->delete();
             return $this->customeResponse(null, 'Deleted successfully', 200);
         } catch (\Throwable $th) {
             //throw $th;

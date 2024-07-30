@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
+use App\Models\City;
 use App\Models\User;
+use App\Models\Country;
 use App\Models\UserInfo;
 use App\Http\Traits\FileTrait;
 use App\Http\Traits\GetCityId;
@@ -41,22 +43,31 @@ class UserInfoController extends Controller
             $front_card_image_path =  $request->hasFile('front_card_image') ? $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage') : null;
             $back_card_image_path = $request->hasFile('back_card_image') ? $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage') : null;
 
-            $cityResult = $this->getCityId($request->cityName);
             $countryResult = $this->getCountryId($request->countryName);
+            $cityResult = $this->getCityId($request->cityName);
 
+            if (!$countryResult['success']) {
+                $newContry = Country::create([
+                    'name' => $request->countryName,
+                    'is_active' => false,
+                ]);
+                // dd($newContry);
+                return $this->customeResponse(null, $countryResult['message'], 404);
+            }
             if (!$cityResult['success']) {
+                City::create([
+                    'city' => $request->cityName,
+                    'is_active' => false,
+                ]);
                 return $this->customeResponse(null, $cityResult['message'], 404);
             }
 
-            if (!$countryResult['success']) {
-                return $this->customeResponse(null, $countryResult['message'], 404);
-            }
 
             $cityId = $cityResult['id'];
             $countryId = $countryResult['id'];
             $user_info = UserInfo::create([
-                'city_id' => $cityId,
                 'country_id' => $countryId,
+                'city_id' => $cityId,
                 'fullName' => $request->fullName,
                 'idNumber' => $request->idNumber,
                 'photo' => $photo_path,
