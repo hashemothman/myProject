@@ -43,12 +43,12 @@ class UserInfoController extends Controller
             $front_card_image_path =  $request->hasFile('front_card_image') ? $this->UploadFile($request, 'userInfos', 'front_card_image', 'BasImage') : null;
             $back_card_image_path = $request->hasFile('back_card_image') ? $this->UploadFile($request, 'userInfos', 'back_card_image', 'BasImage') : null;
 
-            $countryResult = $this->getCountryId($request->countryName);
-            $cityResult = $this->getCityId($request->cityName);
+            $countryResult = $this->getCountryId($request->country_name);
+            $cityResult = $this->getCityId($request->city_name);
 
             if (!$countryResult['success']) {
                 $newContry = Country::create([
-                    'name' => $request->countryName,
+                    'name' => $request->country_name,
                     'is_active' => false,
                 ]);
                 // dd($newContry);
@@ -56,7 +56,7 @@ class UserInfoController extends Controller
             }
             if (!$cityResult['success']) {
                 City::create([
-                    'city' => $request->cityName,
+                    'city' => $request->city_name,
                     'is_active' => false,
                 ]);
                 return $this->customeResponse(null, $cityResult['message'], 404);
@@ -68,8 +68,8 @@ class UserInfoController extends Controller
             $user_info = UserInfo::create([
                 'country_id' => $countryId,
                 'city_id' => $cityId,
-                'fullName' => $request->fullName,
-                'idNumber' => $request->idNumber,
+                'fullName' => $request->full_name,
+                'idNumber' => $request->id_number,
                 'photo' => $photo_path,
                 'front_card_image' => $front_card_image_path,
                 'back_card_image' => $back_card_image_path
@@ -114,7 +114,7 @@ class UserInfoController extends Controller
                 $userInfo->front_card_image = $front_card_image_path;
                 $userInfo->back_card_image = $back_card_image_path;
                 $userInfo->save();
-            
+
                 $userModel = User::find(Auth::id());
                 if (
                     $request->hasFile('photo') &&
@@ -132,7 +132,7 @@ class UserInfoController extends Controller
             DB::rollBack();
             return $this->customeResponse(null, 'Not Found', 404);
         }
-        
+
     }
 
     /**

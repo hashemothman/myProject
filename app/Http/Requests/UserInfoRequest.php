@@ -22,10 +22,10 @@ class UserInfoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cityName'         => 'required|string|min:3',
-            'countryName'      => 'required|string|min:3',
-            'fullName'         => 'required|string',
-            'idNumber'         => 'nullable|numeric',
+            'city_name'         => 'required|string|min:3',
+            'country_name'      => 'required|string|min:3',
+            'full_name'         => 'required|string',
+            'id_number'         => 'nullable|numeric',
             'photo'            => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'front_card_image' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'back_card_image'  => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',

@@ -20,14 +20,14 @@ class UserInfoResource extends JsonResource
         $user = $this->user;
         $city = $this->city;
         $country = $this->country;
-       
+
         return [
             'id'               => $this->id,
             'user'             => new UserResource($user),
             'city'             => new CityResource($city),
             'country'          => new CountryResource($country),
-            'fullName'         => $this->fullName,
-            'idNumber'         => $this->idNumber,
+            'full_name'         => $this->fullName,
+            'id_number'         => $this->idNumber,
             'photo'            => asset('photos/' . $this->photo) ,
             'front_card_image' => asset('photos/' . $this->front_card_image) ,
             'back_card_image'  => asset('photos/' . $this->back_card_image) ,
