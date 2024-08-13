@@ -78,9 +78,9 @@ Route::middleware('jwt.verify')->group(function () {
     ###########################################################################################################
 
     Route::get('/userInfos', [UserInfoController::class, 'index']);
-    Route::get('/userInfo/{userInfo}', [UserInfoController::class, 'show']);
+    Route::get('/userInfo', [UserInfoController::class, 'show']);
     Route::post('/creat_userInfo', [UserInfoController::class, 'store']);
-    Route::put('/update_userInfo/{userInfo}', [UserInfoController::class, 'update']);
+    Route::put('/update_userInfo', [UserInfoController::class, 'update']);
     Route::delete('/delete_userInfo/{userInfo}', [UserInfoController::class, 'destroy']);
 
     ###########################################################################################################

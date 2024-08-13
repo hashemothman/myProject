@@ -85,21 +85,23 @@ class UserInfoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(UserInfo $userInfo)
+    public function show()
     {
-        if (!$userInfo) {
-            return $this->customeResponse(null, 'Not Found', 404);
-        }
-
-        return $this->customeResponse(new UserInfoResource($userInfo), 'Done!', 200);
+        $user_id = Auth::user()->id;
+        $user = User::find($user_id);
+        $user_info = $user->userInfo;
+        return $this->customeResponse(new UserInfoResource($user_info), 'Done!', 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserInfoRequest $request, UserInfo $userInfo)
+    public function update(UpdateUserInfoRequest $request)
     {
         try {
+            $user_id = Auth::user()->id;
+            $user = User::find($user_id);
+            $userInfo = $user->userInfo;
             if (!$userInfo) {
                 return $this->customeResponse(null, 'Not Found', 404);
             }
