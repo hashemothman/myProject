@@ -110,8 +110,8 @@ class UserInfoController extends Controller
                 $front_card_image_path = $this->FileExists($request, $request->front_card_image, 'front_card_image','userInfos','BasImage', false, $userInfo);
                 $back_card_image_path  = $this->FileExists($request, $request->back_card_image, 'back_card_image','userInfos','BasImage', false, $userInfo);
                 $userInfo->city_id = $request->input('city_id') ?? $userInfo->city_id;
-                $userInfo->fullName = $request->input('fullName') ?? $userInfo->fullName;
-                $userInfo->idNumber = $request->input('idNumber') ?? $userInfo->idNumber;
+                $userInfo->fullName = $request->input('full_name') ?? $userInfo->fullName;
+                $userInfo->idNumber = $request->input('id_number') ?? $userInfo->idNumber;
                 $userInfo->photo = $photo_path;
                 $userInfo->front_card_image = $front_card_image_path;
                 $userInfo->back_card_image = $back_card_image_path;
@@ -122,7 +122,7 @@ class UserInfoController extends Controller
                     $request->hasFile('photo') &&
                     $request->hasFile('front_card_image') &&
                     $request->hasFile('back_card_image') &&
-                    $request->input('idNumber')
+                    $request->input('id_number')
                 ) {
                     $userModel->status = "Pending";
                 }

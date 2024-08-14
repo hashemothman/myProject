@@ -23,8 +23,8 @@ class UpdateUserInfoRequest extends FormRequest
     {
         return [
             'city_id'          => 'nullable|integer|exists:cities,id',
-            'fullName'         => 'nullable|string',
-            'idNumber'         => 'nullable|numeric',
+            'full_name'         => 'nullable|string',
+            'id_number'         => 'nullable|numeric',
             'photo'            => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'front_card_image' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
             'back_card_image'  => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
