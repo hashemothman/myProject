@@ -102,9 +102,8 @@ class AuthController extends Controller
     {
         $request->user()->tokens()->delete();
         Auth::logout();
-        return response()->json([
-            'message' => 'Successfully logged out',
-        ]);
+        return $this->customeResponse(['token'=>'deleted'],'Successfully logged out',200);
+
     }
 
 

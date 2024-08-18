@@ -6,7 +6,9 @@ use App\Models\Account;
 use BaconQrCode\Writer;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Endroid\QrCode\Builder\Builder;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use Endroid\QrCode\Encoding\Encoding;
@@ -14,6 +16,7 @@ use App\Http\Resources\AccountResource;
 use BaconQrCode\Renderer\ImageRenderer;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Traits\WalletAndAccountTrait;
+use App\Http\Requests\SenderAccountRequest;
 use Endroid\QrCode\Response\QrCodeResponse;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
@@ -82,5 +85,21 @@ class AccountController extends Controller
         return $this->customeResponse(null, 'Account not found', 404);
     }
 
+    public function getAccount(SenderAccountRequest $request)
+    {
+        try {
+            $sender_account = Account::where('account', $request->account_number)
+                ->with(['user' => function ($query) {
+                    $query->select('id', 'status')
+                        ->with('wallets:id,coin_id,user_id');
+                }])
+                ->get();
 
+            return $this->customeResponse($sender_account, 'Done', 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e);
+            return $this->customeResponse(null, 'there is something error in the server', 500);
+        }
+    }
 }
