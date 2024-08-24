@@ -53,7 +53,7 @@ Route::middleware('jwt.verify')->group(function () {
     ###########################################################
     Route::get('/accounts', [AccountController::class, 'index']);
     Route::post('/create-account', [AccountController::class, 'store']);
-    Route::get('/account/{account}', [AccountController::class, 'show']);
+    Route::get('/account', [AccountController::class, 'show']);
     Route::put('/update-account/{account}', [AccountController::class, 'update']);
     Route::delete('/delete-account/{account}', [AccountController::class, 'destroy']);
 

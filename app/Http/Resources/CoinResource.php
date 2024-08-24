@@ -17,6 +17,8 @@ class CoinResource extends JsonResource
         return [
             'id'        => $this->id,
             'coin_name' =>$this->coin_name,
+            'country_flag'=>asset('' .$this->country_flag),
+
         ];
     }
 }
