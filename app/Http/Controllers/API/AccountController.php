@@ -45,13 +45,14 @@ class AccountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Account $account)
+    public function show()
     {
+        $user = auth()->user()->id;
+        $account= Account::where('user_id',$user)->first();
         if ($account) {
-            // dd($account);
             return $this->customeResponse(new AccountResource($account), 'Done', 200);
         }
-        return $this->customeResponse(null, 'account not found', 404);
+        return $this->customeResponse($account, 'account not found', 404);
 
     }
 
