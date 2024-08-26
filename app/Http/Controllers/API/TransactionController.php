@@ -13,6 +13,8 @@ use App\Http\Traits\ApiResponseTrait;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Requests\UpdateTransactionRequest;
+use App\Models\User;
+use App\Models\Account;
 
 
 class TransactionController extends Controller
@@ -22,16 +24,28 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   
+    public function index(Request $request)
     {
         try {
-            $transactions = Transaction::all();
-            return $this->customeResponse(TransactionResource::collection($transactions),"Done",200);
+            $query = Transaction::query();
+            if ($request->has('sender_id')) {
+                $query->where('sender', $request->sender_id);
+            }
+            if ($request->has('date_from') && $request->has('date_to')) {
+                $query->whereBetween('created_at', [$request->date_from, $request->date_to]);
+            }
+            if ($request->has('coin_id')) {
+                $query->where('coin_id', $request->coin_id);
+            }
+            $transactions = $query->paginate(10);
+            return $this->resourcePaginated(TransactionResource::collection($transactions),"Done",200);
         } catch (\Throwable $th) {
             Log::error($th);
             return $this->customeResponse(null,"Error, There somthing Rong here",500);
         }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -92,5 +106,48 @@ class TransactionController extends Controller
             return $this->customeResponse(null,"Error, There somthing Rong here",500);
         }
     }
+
+      /**
+     * Display a listing of the transactions for the authenticated user.
+     */
+    public function getUserTransactions(Request $request)
+    {
+        try {
+        $user = Auth::user();
+        $user = User::with('account')->find($user->id);
+
+        // Ensure the user is authenticated
+        if (!$user) {
+            return $this->customeResponse(null, "Unauthorized", 401);
+        }
+
+        $account = $user->account;
+        $account_number = $account->account;
+        $query = Transaction::where(function ($query) use ($user, $account_number) {
+                    $query->where('sender', $user->id)
+                          ->orWhere('reciever_account', $account_number);
+                })
+                ->where('transactionable_type', 'App\\Models\\User')
+                ->selectRaw('*');
+
+        // Apply filters based on request
+        if ($request->has('date_from') && $request->has('date_to')) {
+            $query->whereBetween('date', [$request->date_from, $request->date_to]);
+        }
+        if ($request->has('coin_id')) {
+            $query->where('coin_id', $request->coin_id);
+        }
+
+        // Paginate the transactions
+        $transactions = $query->paginate(10);
+
+
+            return $this->resourcePaginated(TransactionResource::collection($transactions), "Done", 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return $this->customeResponse(null, "Error, There something wrong here", 500);
+        }
+
+}
 
 }
