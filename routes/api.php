@@ -127,6 +127,7 @@ Route::middleware('jwt.verify')->group(function () {
     Route::get('/transactions', [TransactionController::class, 'index']);
     Route::post('/store-transacrion', [TransactionController::class,'store'])->middleware('daily.transfer.limit');
     Route::get('/transactions/{transaction}', [TransactionController::class, 'show']);
+    Route::post('/user-transactions', [TransactionController::class, 'getUserTransactions']);
     ############################################################################
 
 
